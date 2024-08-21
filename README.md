@@ -2,7 +2,7 @@
 
 *Projeto para disciplina de PLP 2024.1 na UFCG*
 
-O projeto permite que professores e alunos reservem salas, com diferentes niveis de prioridade.
+O projeto permite que professores e alunos reservem salas, com diferentes níveis de prioridade.
 
 O mesmo projeto será feito nas linguagens Haskell e Prolog.
 

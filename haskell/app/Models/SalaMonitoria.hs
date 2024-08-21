@@ -1,4 +1,4 @@
-module Utils.SalaMonitoria where
+module Models.SalaMonitoria where
 
 import GHC.Generics
 import Data.Aeson

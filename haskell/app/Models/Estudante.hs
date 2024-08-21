@@ -1,4 +1,4 @@
-module Utils.Estudante where
+module Models.Estudante where
 
 import GHC.Generics
 import Data.Aeson

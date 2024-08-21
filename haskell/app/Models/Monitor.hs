@@ -1,4 +1,4 @@
-module Utils.Monitor where
+module Models.Monitor where
 import GHC.Generics
 import Data.Aeson (ToJSON, FromJSON)
 

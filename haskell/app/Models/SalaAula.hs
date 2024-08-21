@@ -1,4 +1,4 @@
-module Utils.SalaAula where
+module Models.SalaAula where
 
 import GHC.Generics
 import Data.Aeson

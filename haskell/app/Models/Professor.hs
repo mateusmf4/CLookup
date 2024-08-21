@@ -1,4 +1,4 @@
-module Utils.Professor where
+module Models.Professor where
 
 import GHC.Generics
 import Data.Aeson

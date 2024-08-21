@@ -1,4 +1,4 @@
-module Utils.LCC where
+module Models.LCC where
 
 import GHC.Generics
 import Data.Aeson
