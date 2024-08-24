@@ -3,12 +3,12 @@
 module Models.Estudante where
 
 import GHC.Generics
-import Data.Version
 import Data.Aeson
+import Data.Word (Word8)
 
 data Estudante = Estudante {
-    nome :: String,
-    matricula :: Int,
+    nomeEstudante :: String,
+    matriculaEstudante :: Word8,
     monitor :: Bool
 } deriving (Generic, Show)
 

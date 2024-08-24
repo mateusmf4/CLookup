@@ -61,16 +61,24 @@ executable clookup
     other-modules:
         Models.Estudante
         Models.LCC
-        Models.Monitor
         Models.Professor
         Models.SalaAula
         Models.SalaMonitoria
+        Controllers.CadastroController
+        Controllers.EstudanteController
+        Controllers.LCCController
+        Controllers.LoginController
+        Controllers.ProfessorController
+        Controllers.SalaAulaController
+        Controllers.SalaMonitoriaController
+        Models.Utils.Cadastro
+        Models.Utils.Login
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.17.2.1, aeson, bytestring
+    build-depends:    base ^>=4.17.2.1, aeson, bytestring, directory, filepath
 
     -- Directories containing source files.
     hs-source-dirs:   app

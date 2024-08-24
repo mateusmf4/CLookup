@@ -2,11 +2,11 @@ module Models.Professor where
 
 import GHC.Generics
 import Data.Aeson
+import Data.Word (Word8)
 
 data Professor = Professor {
-    nome :: String,
-    matricula :: Int,
-    prioridade :: Int
+    nomeProfessor :: String,
+    matriculaProfessor :: Word8
 } deriving (Generic, Show)
 
 instance ToJSON Professor

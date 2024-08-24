@@ -1,10 +1,12 @@
 module Main where
 
-import System.Exit (exitSuccess)
+import System.Exit
+import Controllers.LoginController
+import Controllers.CadastroController
 
 printar :: IO()
 printar = do
-    putStrLn ("\n--------------------" ++ " CPBooking " ++ "--------------------\n")
+    putStrLn ("\n--------------------" ++ " ClookuP " ++ "--------------------\n")
     putStrLn "Digite a opcao desejada:\n"
     putStrLn "1- Login"
     putStrLn "2- Cadastro"
@@ -16,8 +18,8 @@ printar = do
 
 opcaoSelecionada :: String -> IO()
 opcaoSelecionada opcao
-    -- | opcao == "1" = Modules.Controllers.LoginController.logar
-    -- | opcao == "2" = Modules.Controllers.CadastroController.cadastrar
+    | opcao == "1" = Controllers.LoginController.logar
+    | opcao == "2" = Controllers.CadastroController.cadastrar
     | opcao == "3" = sair
     | otherwise = putStrLn "Error: Opcao Invalida!\n"
 
