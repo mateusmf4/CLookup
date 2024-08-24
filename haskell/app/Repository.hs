@@ -7,6 +7,8 @@ import Data.Aeson (FromJSON, ToJSON, decodeFileStrict, encodeFile)
 import qualified Data.Aeson.KeyMap as KeyMap
 import Models.Estudante
 import Data.Aeson.Key (fromString)
+import System.Directory (createDirectoryIfMissing)
+import System.FilePath (takeDirectory)
 
 newtype DatabaseStruct = DatabaseStruct {
     estudantes :: KeyMap.KeyMap Estudante
@@ -18,16 +20,23 @@ instance FromJSON DatabaseStruct
 defaultDatabaseStruct :: DatabaseStruct
 defaultDatabaseStruct = DatabaseStruct { estudantes = KeyMap.empty }
 
+databasePath :: FilePath
+databasePath = "./Database/dados.json"
+
 loadDatabase :: IO DatabaseStruct
 loadDatabase = do
-    dados <- decodeFileStrict "./Database/dados.json"
+    -- Garante que a pasta Database existe
+    createDirectoryIfMissing True $ takeDirectory databasePath
+    dados <- decodeFileStrict databasePath
     case dados of
         Just value -> return value
         Nothing -> return defaultDatabaseStruct
 
 saveDatabase :: DatabaseStruct -> IO ()
 saveDatabase db = do
-    encodeFile "./Database/dados.json" db
+    -- Garante que a pasta Database existe
+    createDirectoryIfMissing True $ takeDirectory databasePath
+    encodeFile databasePath db
 
 fetchEstudante :: Int -> IO (Maybe Estudante)
 fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudantes <$> loadDatabase

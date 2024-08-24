@@ -74,6 +74,9 @@ executable clookup
         Controllers.SalaMonitoriaController
         Models.Utils.Cadastro
         Models.Utils.Login
+        Menus.Inicio
+        Menus.Cadastro
+        Menus.Util
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
