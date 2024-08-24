@@ -1,9 +1,8 @@
 module Menus.Cadastro where
 
 import Menus.Util (printBanner)
-import Models.Estudante
-import qualified Repository
-import Data.Maybe (isJust)
+
+import qualified Controllers.EstudanteController as EstudanteController
 
 menuCadastro :: IO()
 menuCadastro = do
@@ -31,12 +30,8 @@ cadastroEstudante = do
     nome <- getLine
     putStr "Matricula: "
     matricula <- readLn
-    existe <- isJust <$> Repository.fetchEstudante matricula
-    if existe then do
-        putStrLn "Estudante com mesma matricula ja existe!"
-        return ()
-    else do
-        let estudante = Estudante { nome = nome, matricula = matricula, monitor = False }
-        Repository.saveEstudante estudante
-        putStrLn "Cadastro feito com sucesso!"
-        return ()
+
+    valor <- EstudanteController.cadastro nome matricula False
+    case valor of
+        Left erro -> putStrLn erro
+        Right _ -> putStrLn "Cadastro feito com succeso!"

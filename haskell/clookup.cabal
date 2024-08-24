@@ -65,15 +65,11 @@ executable clookup
         Models.Professor
         Models.SalaAula
         Models.SalaMonitoria
-        Controllers.CadastroController
         Controllers.EstudanteController
         Controllers.LCCController
-        Controllers.LoginController
         Controllers.ProfessorController
         Controllers.SalaAulaController
         Controllers.SalaMonitoriaController
-        Models.Utils.Cadastro
-        Models.Utils.Login
         Menus.Inicio
         Menus.Cadastro
         Menus.Util

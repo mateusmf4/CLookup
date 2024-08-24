@@ -5,11 +5,12 @@ module Repository where
 import GHC.Generics (Generic)
 import Data.Aeson (FromJSON, ToJSON, decodeFileStrict, encodeFile)
 import qualified Data.Aeson.KeyMap as KeyMap
-import Models.Estudante
 import Data.Aeson.Key (fromString)
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath (takeDirectory)
 import Control.Exception (try, IOException)
+
+import Models.Estudante
 
 newtype DatabaseStruct = DatabaseStruct {
     estudantes :: KeyMap.KeyMap Estudante
@@ -42,11 +43,13 @@ saveDatabase db = do
     createDirectoryIfMissing True $ takeDirectory databasePath
     encodeFile databasePath db
 
+alterDatabase :: (DatabaseStruct -> DatabaseStruct) -> IO ()
+alterDatabase f = do
+    db <- loadDatabase
+    saveDatabase (f db)
+
 fetchEstudante :: Int -> IO (Maybe Estudante)
 fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudantes <$> loadDatabase
 
 saveEstudante :: Estudante -> IO ()
-saveEstudante estudante = do
-    dados <- loadDatabase
-    saveDatabase dados { estudantes = KeyMap.insert (fromString $ show $ matricula estudante) estudante (estudantes dados) }
-    return ()
+saveEstudante estudante = alterDatabase (\db -> db { estudantes = KeyMap.insert (fromString $ show $ matricula estudante) estudante (estudantes db) })
