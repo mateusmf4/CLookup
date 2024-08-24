@@ -4,7 +4,7 @@ import Models.Utils.Cadastro
 
 cadastrar :: IO()
 cadastrar = do
-    putStrLn ("\n--------------------" ++ " ClookuP " ++ "--------------------\n")
+    putStrLn ("\n--------------------" ++ " CLookup " ++ "--------------------\n")
     putStrLn "Cadastrar como:\n"
     putStrLn "1- Estudante"
     putStrLn "2- Monitor"

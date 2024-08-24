@@ -7,7 +7,7 @@ O projeto permite que professores e alunos reservem salas, com diferentes nívei
 O mesmo projeto será feito nas linguagens Haskell e Prolog.
 
 ## Haskell
-Para executar o projeto em haskell, basta executar dentro da pasta haskell:
+Para executar o projeto em haskell, basta executar **dentro da pasta haskell**:
 ```
 cabal run
 ```

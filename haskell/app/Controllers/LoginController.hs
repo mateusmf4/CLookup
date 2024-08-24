@@ -4,7 +4,7 @@ import Models.Utils.Login
 
 logar :: IO()
 logar = do
-    putStrLn ("\n--------------------" ++ " ClookuP " ++ "--------------------\n")
+    putStrLn ("\n--------------------" ++ " CLookup " ++ "--------------------\n")
     putStrLn "Logar como:\n"
     putStrLn "1- Estudante"
     putStrLn "2- Monitor"

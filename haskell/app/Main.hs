@@ -6,7 +6,7 @@ import Controllers.CadastroController
 
 printar :: IO()
 printar = do
-    putStrLn ("\n--------------------" ++ " ClookuP " ++ "--------------------\n")
+    putStrLn ("\n--------------------" ++ " CLookup " ++ "--------------------\n")
     putStrLn "Digite a opcao desejada:\n"
     putStrLn "1- Login"
     putStrLn "2- Cadastro"
