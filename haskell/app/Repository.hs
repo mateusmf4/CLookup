@@ -9,6 +9,7 @@ import Models.Estudante
 import Data.Aeson.Key (fromString)
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath (takeDirectory)
+import Control.Exception (try, IOException)
 
 newtype DatabaseStruct = DatabaseStruct {
     estudantes :: KeyMap.KeyMap Estudante
@@ -27,10 +28,13 @@ loadDatabase :: IO DatabaseStruct
 loadDatabase = do
     -- Garante que a pasta Database existe
     createDirectoryIfMissing True $ takeDirectory databasePath
-    dados <- decodeFileStrict databasePath
+    dados <- try $ decodeFileStrict databasePath
     case dados of
-        Just value -> return value
-        Nothing -> return defaultDatabaseStruct
+        Right (Just value) -> return value
+        -- caso haja algum erro em ler o arquivo (se não existe),
+        -- então cria um database padrão
+        Left (_ :: IOException) -> return defaultDatabaseStruct
+        _ -> return defaultDatabaseStruct
 
 saveDatabase :: DatabaseStruct -> IO ()
 saveDatabase db = do
