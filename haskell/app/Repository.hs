@@ -27,8 +27,6 @@ databasePath = "./Database/dados.json"
 
 loadDatabase :: IO DatabaseStruct
 loadDatabase = do
-    -- Garante que a pasta Database existe
-    createDirectoryIfMissing True $ takeDirectory databasePath
     dados <- try $ decodeFileStrict databasePath
     case dados of
         Right (Just value) -> return value

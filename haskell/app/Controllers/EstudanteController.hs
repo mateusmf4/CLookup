@@ -2,7 +2,7 @@ module Controllers.EstudanteController where
 
 import qualified Repository
 import Models.Estudante
-import Data.Maybe (isJust)
+import Data.Maybe (isJust, isNothing)
 
 cadastro :: String -> Int -> Bool -> IO (Either String Estudante)
 cadastro nome matricula monitor = do
@@ -18,7 +18,7 @@ atualizaMonitor :: Int -> IO (Either String Estudante)
 atualizaMonitor matricula = do
     existe <- Repository.fetchEstudante matricula
     if isNothing existe then do
-        return $  Left "Estudante não está cadastrado"
+        return $ Left "Estudante não está cadastrado"
     else do
         let Just estudante = existe
         let atualizaMonitor = not (monitor estudante)
