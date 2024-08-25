@@ -5,7 +5,8 @@ import Data.Aeson
 
 data SalaMonitoria = SalaMonitoria {
     nome :: String,
-    numeroSala :: Int
+    numeroSala :: Int,
+    ocupada :: Bool -- adicionei esse campo para verificar se uma sala está ocupada ou não p poder trabalhar com o resultado no controller
 } deriving (Generic, Show)
 
 instance ToJSON SalaMonitoria
