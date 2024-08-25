@@ -7,11 +7,13 @@ import qualified Controllers.EstudanteController as EstudanteController
 menuCadastro :: IO()
 menuCadastro = do
     printBanner
-    putStrLn "Cadastrar como:\n"
+    putStrLn "Cadastrar como:"
+    putStrLn ""
     putStrLn "1- Estudante"
     putStrLn "2- Monitor"
     putStrLn "3- Professor"
-    putStrLn "4- Voltar\n"
+    putStrLn "4- Voltar"
+    putStrLn ""
     putStr "Digite a opcao: "
     opcao <- getLine
     escolher opcao
