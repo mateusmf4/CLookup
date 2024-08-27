@@ -29,6 +29,7 @@ executable clookup
         Menus.Cadastro
         Menus.Util
         Menus.Calendario
+        Menus.Logado
 
     build-depends:    base ^>=4.17.2.1, aeson, bytestring, directory, filepath, time
 
