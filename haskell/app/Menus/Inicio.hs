@@ -8,7 +8,7 @@ import Menus.Calendario (showToday)
 menuInicio :: IO()
 menuInicio = do
     printBanner
-    putStrLn "Digite a opcao desejada:"
+    putStrLn "Digite a opção desejada:"
     putStrLn ""
     putStrLn "1- Login"
     putStrLn "2- Cadastro"
