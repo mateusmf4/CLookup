@@ -16,15 +16,11 @@ executable clookup
     other-modules:
         Repository
         Models.Estudante
-        Models.LCC
         Models.Professor
-        Models.SalaAula
-        Models.SalaMonitoria
+        Models.Sala
         Controllers.EstudanteController
-        Controllers.LCCController
         Controllers.ProfessorController
-        Controllers.SalaAulaController
-        Controllers.SalaMonitoriaController
+        Controllers.SalaController
         Menus.Inicio
         Menus.Cadastro
         Menus.Util
