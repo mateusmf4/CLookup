@@ -3,6 +3,7 @@ module Menus.Inicio where
 import System.Exit (exitSuccess)
 import Menus.Util (printBanner)
 import Menus.Cadastro (menuCadastro)
+import Menus.Login (menuLogin)
 import Menus.Calendario (showToday)
 
 menuInicio :: IO()
@@ -24,7 +25,7 @@ menuInicio = do
 
 escolher :: String -> IO()
 escolher opcao
-    | opcao == "1" = return() -- Controllers.LoginController.logar
+    | opcao == "1" = menuLogin
     | opcao == "2" = menuCadastro
     | opcao == "3" = showToday
     | opcao == "4" = sair

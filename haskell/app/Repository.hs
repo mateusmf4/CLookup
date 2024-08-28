@@ -11,16 +11,20 @@ import System.FilePath (takeDirectory)
 import Control.Exception (try, IOException)
 
 import Models.Estudante
+import Models.Professor
+import Models.Sala
 
-newtype DatabaseStruct = DatabaseStruct {
-    estudantes :: KeyMap.KeyMap Estudante
+data DatabaseStruct = DatabaseStruct {
+    estudantes :: KeyMap.KeyMap Estudante,
+    professores :: KeyMap.KeyMap Professor,
+    salas :: KeyMap.KeyMap Sala
 } deriving (Generic, Show)
 
 instance ToJSON DatabaseStruct
 instance FromJSON DatabaseStruct
 
 defaultDatabaseStruct :: DatabaseStruct
-defaultDatabaseStruct = DatabaseStruct { estudantes = KeyMap.empty }
+defaultDatabaseStruct = DatabaseStruct { estudantes = KeyMap.empty, professores = KeyMap.empty, salas = KeyMap.empty }
 
 databasePath :: FilePath
 databasePath = "./Database/dados.json"
@@ -46,8 +50,23 @@ alterDatabase f = do
     db <- loadDatabase
     saveDatabase (f db)
 
+createRooms :: IO ()
+createRooms = do
+    let lcc1 = Sala { nomeSala = "LCC1", numeroSala = 2, qtdeComputador = 50, qtdeCadeiras = 51, tipoSala = LCC, reservas = []}
+    let lcc2 = Sala { nomeSala = "LCC2", numeroSala = 7, qtdeComputador = 50, qtdeCadeiras = 51, tipoSala = LCC, reservas = []}
+    let lcc3 = Sala { nomeSala = "LCC3", numeroSala = 8, qtdeComputador = 100, qtdeCadeiras = 101, tipoSala = LCC, reservas = []}
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC1") lcc1 (salas db)})
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC2") lcc2 (salas db)})
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC3") lcc3 (salas db)})
+
 fetchEstudante :: Int -> IO (Maybe Estudante)
 fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudantes <$> loadDatabase
 
+fetchProfessor :: Int -> IO (Maybe Professor)
+fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . professores <$> loadDatabase
+
 saveEstudante :: Estudante -> IO ()
 saveEstudante estudante = alterDatabase (\db -> db { estudantes = KeyMap.insert (fromString $ show $ matricula estudante) estudante (estudantes db) })
+
+saveProfessor :: Professor -> IO ()
+saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert (fromString $ show $ matriculaProfessor professor) professor (professores db) })
