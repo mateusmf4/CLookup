@@ -39,6 +39,8 @@ salaAula =
     [
         Sala {nome = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, tipoSala = 2, reservas = []}
     ]
+
+    -- teste teste
 -- método: reservar uma sala -- maria
 -- método: verificar as salas disponíveis e indisponíveis -- gaby
 -- método: cancelar uma reserva -- gaby
