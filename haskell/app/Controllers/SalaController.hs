@@ -15,13 +15,19 @@ reservasIguais r1 r2 = inicio r1 == inicio r2 && termino r1 == termino r2
 disponibilidadeSala :: Reserva -> Sala -> Bool
 disponibilidadeSala novaReserva sala = 
     not $ any (verificaConflito novaReserva) 
-    (reservas sala)
+      (reservas sala)
 
 -- Cancelando uma reserva de Sala.
 cancelarReserva :: Reserva -> Sala -> Sala
 cancelarReserva reserva sala = sala { reservas = novasReservas }
   where
     novasReservas = deleteBy reservasIguais reserva (reservas sala)
+
+-- Reservando uma sala
+reservarSala :: Reserva -> Sala -> Maybe Sala
+reservarSala reserva sala 
+    | disponibilidadeSala reserva sala = Just (sala { reservas = reserva : reservas sala })
+    | otherwise = Nothing
 
 salasMonitoria :: [Sala]
 salasMonitoria =
