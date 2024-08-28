@@ -6,11 +6,18 @@ import Models.Sala (Sala)
 conflito :: Reserva -> Reserva -> Bool
 conflito r1 r2 = not (termino r1 <= inicio r2 || termino r2 <= inicio r1)
 
+mesmaReserva :: Reserva -> Reserva -> Bool
+mesmaReserva r1 r2 = inicio r1 == inicio r2 && termino r1 == termino r2
+
 disponibilidadeSala :: Reserva -> Sala -> Bool
 disponibilidadeSala novaReserva sala = 
     not $ any (conflito novaReserva) 
     (reservas sala)
 
+cancelarReserva :: Reserva -> Sala -> Sala
+cancelarReserva reserva sala = sala { reservas = novasReservas }
+  where
+    novasReservas = deleteBy mesmaReserva reserva (reservas sala)
 
 salasMonitoria :: [Models.Sala]
 salasMonitoria =
