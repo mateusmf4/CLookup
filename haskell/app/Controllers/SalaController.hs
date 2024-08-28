@@ -1,7 +1,7 @@
 module Controllers.SalaController where
 import qualified Repository
 import Data.Maybe (isJust, isNothing)
-import Models.Sala (Sala)
+import Models.Sala
 
 -- Compara duas reservas e verifica se há conflito de horários.
 verificaConflito :: Reserva -> Reserva -> Bool
@@ -23,7 +23,6 @@ cancelarReserva reserva sala = sala { reservas = novasReservas }
   where
     novasReservas = deleteBy reservasIguais reserva (reservas sala)
 
--- Criando salas fixas do Bloco 
 salasMonitoria :: [Models.Sala]
 salasMonitoria =
     [
@@ -31,7 +30,7 @@ salasMonitoria =
         Sala {nome = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]},
         Sala {nome = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]}
     ]
-salasLCC :: [Models.Sala]
+salasLCC :: [Sala]
 salasLCC = 
     [
         Sala {nome = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=1, reservas=[]},
@@ -39,7 +38,7 @@ salasLCC =
         Sala {nome = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, tipoSala=1, reservas=[]}
 
     ]
-salaAula :: [Models.Sala]
+salaAula :: [Sala]
 salaAula = 
     [
         Sala {nome = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, tipoSala = 2, reservas = []}
