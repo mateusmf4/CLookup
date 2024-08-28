@@ -1,6 +1,6 @@
 module Menus.Cadastro where
 
-import Menus.Util (printBanner, getLinePrompt, readLnPrompt)
+import Menus.Util (printBanner, getLinePrompt, readLnPrompt, printMenuEscolhas)
 import Menus.Logado (menuLogado)
 
 import qualified Controllers.EstudanteController as EstudanteController
@@ -9,21 +9,12 @@ import qualified Controllers.ProfessorController as ProfessorController
 menuCadastro :: IO()
 menuCadastro = do
     printBanner
-    putStrLn "Cadastrar como:"
-    putStrLn ""
-    putStrLn "1- Estudante"
-    putStrLn "2- Professor"
-    putStrLn "3- Voltar"
-    putStrLn ""
-    opcao <- getLinePrompt "Digite a opcao: "
-    escolher opcao
-
-escolher :: String -> IO()
-escolher opcao
-    | opcao == "1" = cadastroEstudante
-    | opcao == "2" = cadastroProfessor
-    | opcao == "3" = return ()
-    | otherwise = putStrLn "Opção Inválida"
+    putStrLn "Cadastrar como:\n"
+    printMenuEscolhas [
+        ("Estudante", cadastroEstudante),
+        ("Professor", cadastroProfessor),
+        ("Voltar", return ())
+        ]
 
 cadastroEstudante :: IO()
 cadastroEstudante = do
