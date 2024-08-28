@@ -3,10 +3,14 @@ import qualified Repository
 import Data.Maybe (isJust, isNothing)
 import Models.Sala (Sala)
 
+conflito :: Reserva -> Reserva -> Bool
+conflito r1 r2 = not (termino r1 <= inicio r2 || termino r2 <= inicio r1)
 
-selecionaSala :: String -> Sala -> Bool
-selecionaSala nomeDesejado sala
-nome sala = nomeDesejado
+disponibilidadeSala :: Reserva -> Sala -> Bool
+disponibilidadeSala novaReserva sala = 
+    not $ any (conflito novaReserva) 
+    (reservas sala)
+
 
 salasMonitoria :: [Models.Sala]
 salasMonitoria =
