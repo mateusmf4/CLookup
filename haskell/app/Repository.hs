@@ -52,13 +52,13 @@ alterDatabase f = do
 
 createRooms :: IO ()
 createRooms = do
-    let lcc1 = Sala {nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=toEnum 0, reservas=[]}
-    let lcc2 = Sala {nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=toEnum 0, reservas=[]}
-    let lcc3 = Sala {nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, tipoSala=toEnum 0, reservas=[]}
-    let cp01  = Sala {nomeSala = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, tipoSala =toEnum 1, reservas = []}
-    let patos = Sala {nomeSala = "Patos", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=toEnum 2, reservas=[]}
-    let cuites = Sala {nomeSala = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=toEnum 2, reservas=[]}
-    let sousa = Sala {nomeSala = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=toEnum 2, reservas=[]}
+    let lcc1 = Sala {nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, numSala = 4, tipoSala=toEnum 0, reservas=[]}
+    let lcc2 = Sala {nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, numSala = 5, tipoSala=toEnum 0, reservas=[]}
+    let lcc3 = Sala {nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, numSala = 6, tipoSala=toEnum 0, reservas=[]}
+    let cp01  = Sala {nomeSala = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, numSala = 7, tipoSala =toEnum 1, reservas = []}
+    let patos = Sala {nomeSala = "Patos", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 1, tipoSala=toEnum 2, reservas=[]}
+    let cuites = Sala {nomeSala = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 2, tipoSala=toEnum 2, reservas=[]}
+    let sousa = Sala {nomeSala = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 3, tipoSala=toEnum 2, reservas=[]}
     
     alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC 1") lcc1 (salas db)})
     alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC 2") lcc2 (salas db)})
