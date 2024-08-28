@@ -30,7 +30,7 @@ salasMonitoria =
         Sala {nome = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]},
         Sala {nome = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]}
     ]
-salasLCC :: [Sala]
+salasLCC :: [Models.Sala]
 salasLCC = 
     [
         Sala {nome = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=1, reservas=[]},
@@ -38,7 +38,7 @@ salasLCC =
         Sala {nome = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, tipoSala=1, reservas=[]}
 
     ]
-salaAula :: [Sala]
+salaAula :: [Models.Sala]
 salaAula = 
     [
         Sala {nome = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, tipoSala = 2, reservas = []}
