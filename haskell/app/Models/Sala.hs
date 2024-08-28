@@ -5,7 +5,7 @@ import Data.Aeson
 import Data.Time (UTCTime)
 
 data Sala = Sala {
-    nome :: String,
+    nomeSala :: String,
     qtdeComputador :: Int, 
     qtdeCadeiras :: Int, 
     tipoSala :: TipoSala, -- Indica a qual tipo de sala se refere,

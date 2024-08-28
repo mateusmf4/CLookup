@@ -52,12 +52,12 @@ alterDatabase f = do
 
 createRooms :: IO ()
 createRooms = do
-    let lcc1 = Sala { nomeSala = "LCC1", numeroSala = 2, qtdeComputador = 50, qtdeCadeiras = 51, tipoSala = LCC, reservas = []}
-    let lcc2 = Sala { nomeSala = "LCC2", numeroSala = 7, qtdeComputador = 50, qtdeCadeiras = 51, tipoSala = LCC, reservas = []}
-    let lcc3 = Sala { nomeSala = "LCC3", numeroSala = 8, qtdeComputador = 100, qtdeCadeiras = 101, tipoSala = LCC, reservas = []}
-    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC1") lcc1 (salas db)})
-    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC2") lcc2 (salas db)})
-    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC3") lcc3 (salas db)})
+    let lcc1 = Sala { nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala= LCC, reservas=[]}
+    let lcc2 = Sala { nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala= LCC, reservas=[]}
+    let lcc3 = Sala { nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, tipoSala= LCC, reservas=[]}
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC 1") lcc1 (salas db)})
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC 2") lcc2 (salas db)})
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC 3") lcc3 (salas db)})
 
 fetchEstudante :: Int -> IO (Maybe Estudante)
 fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudantes <$> loadDatabase
