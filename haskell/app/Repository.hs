@@ -26,6 +26,15 @@ instance FromJSON DatabaseStruct
 defaultDatabaseStruct :: DatabaseStruct
 defaultDatabaseStruct = DatabaseStruct { estudantes = KeyMap.empty, professores = KeyMap.empty, salas = KeyMap.empty }
 
+createRooms :: IO ()
+createRooms = do
+    let lcc1 = Sala { nomeSala = "LCC1", numeroSala = 2, qtdeComputador = 50, qtdeCadeiras = 51, tipoSala = LCC, reservas = []}
+    let lcc2 = Sala { nomeSala = "LCC2", numeroSala = 7, qtdeComputador = 50, qtdeCadeiras = 51, tipoSala = LCC, reservas = []}
+    let lcc3 = Sala { nomeSala = "LCC3", numeroSala = 8, qtdeComputador = 100, qtdeCadeiras = 101, tipoSala = LCC, reservas = []}
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC1") lcc1 (salas db)})
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC2") lcc2 (salas db)})
+    alterDatabase (\db -> db { salas = KeyMap.insert (fromString "LCC3") lcc3 (salas db)})
+
 databasePath :: FilePath
 databasePath = "./Database/dados.json"
 
