@@ -8,6 +8,7 @@ data Sala = Sala {
     nomeSala :: String,
     qtdeComputador :: Int, 
     qtdeCadeiras :: Int, 
+    numSala :: Int,
     tipoSala :: TipoSala, -- Indica a qual tipo de sala se refere,
     reservas :: [Reserva]   -- lista de reservas para a sala. Por meio de cada horario e data agendada, eu poderia verificar se já 
                             -- tem reserva para esse dia e horário ou se ta livre
