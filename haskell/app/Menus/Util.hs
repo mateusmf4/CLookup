@@ -18,7 +18,7 @@ readLnPrompt prompt = do
 
 printMenuEscolhas :: [(String, IO ())] -> IO ()
 printMenuEscolhas escolhas = do
-    forM_ (zip [0..] escolhas) (\(i, (escolha, _)) -> do
+    forM_ (zip [0..] escolhas) (\(i :: Int, (escolha, _)) ->
         putStrLn $ show (i + 1) ++ "- " ++ escolha)
     putStrLn ""
     opcao' :: Maybe Int <- readMaybe <$> getLinePrompt "Digite a opção: "
