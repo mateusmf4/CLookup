@@ -29,6 +29,26 @@ reservarSala reserva sala
     | disponibilidadeSala reserva sala = Just (sala { reservas = reserva : reservas sala })
     | otherwise = Nothing
 
+-- Atualizando uma reserva
+reservasDaSala :: Sala -> [Reserva]
+reservasDaSala sala = reservas sala
+
+atualizarReservaSala :: Reserva -> Reserva -> Sala -> Sala
+atualizarReservaSala novaReserva reservaAtual sala = sala { reservas = novasReservas }
+  where
+    novasReservas = map (\r -> if r == reservaAtual then novaReserva else r) (reservas sala)
+
+atualizaReserva :: Reserva -> Sala -> Bool
+atualizaReserva novaReserva sala = do
+  let reservasSala = reservasDaSala sala
+  putStrLn "Selecione a reserva a ser atualizada:"
+  mapM_ (printReserva . show) (zip [1..] reservasSala)
+  choice <- getLine
+  let reservaIndex = read choice :: Int
+  let reservaAtual = reservasSala !! (reservaIndex - 1)
+  let novaReservaSala = atualizarReservaSala novaReserva reservaAtual sala
+  return (novaReservaSala /= sala)
+  
 salasMonitoria :: [Sala]
 salasMonitoria =
     [
