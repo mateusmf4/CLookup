@@ -4,9 +4,9 @@ import GHC.Generics
 import Data.Aeson
 
 data Estudante = Estudante {
-    nome :: String,
-    matricula :: Int,
-    monitor :: Bool
+    nomeEstudante :: String,
+    matriculaEstudante :: Int,
+    monitorEstudante :: Bool
 } deriving (Generic, Show)
 
 instance ToJSON Estudante
