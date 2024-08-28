@@ -2,6 +2,7 @@ module Controllers.SalaController where
 import qualified Repository
 import Data.Maybe (isJust, isNothing)
 import Models.Sala
+import Data.List (deleteBy)
 
 -- Compara duas reservas e verifica se há conflito de horários.
 verificaConflito :: Reserva -> Reserva -> Bool
@@ -15,7 +16,7 @@ reservasIguais r1 r2 = inicio r1 == inicio r2 && termino r1 == termino r2
 disponibilidadeSala :: Reserva -> Sala -> Bool
 disponibilidadeSala novaReserva sala = 
     not $ any (verificaConflito novaReserva) 
-    (reservas sala)
+      (reservas sala)
 
 -- Cancelando uma reserva de Sala.
 cancelarReserva :: Reserva -> Sala -> Sala
@@ -23,25 +24,31 @@ cancelarReserva reserva sala = sala { reservas = novasReservas }
   where
     novasReservas = deleteBy reservasIguais reserva (reservas sala)
 
+-- Reservando uma sala
+reservarSala :: Reserva -> Sala -> Maybe Sala
+reservarSala reserva sala 
+    | disponibilidadeSala reserva sala = Just (sala { reservas = reserva : reservas sala })
+    | otherwise = Nothing
+
 salasMonitoria :: [Sala]
 salasMonitoria =
     [
-        Sala {nomeSala = "Patos", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]},
-        Sala {nomeSala = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]},
-        Sala {nomeSala = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=0, reservas=[]}
+        Sala {nomeSala = "Patos", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=Monitoria, reservas=[]},
+        Sala {nomeSala = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=Monitoria, reservas=[]},
+        Sala {nomeSala = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, tipoSala=Monitoria, reservas=[]}
     ]
 salasLCC :: [Sala]
 salasLCC = 
     [
-        Sala {nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=1, reservas=[]},
-        Sala {nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=1, reservas=[]},
-        Sala {nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, tipoSala=1, reservas=[]}
+        Sala {nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=LCC, reservas=[]},
+        Sala {nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, tipoSala=LCC, reservas=[]},
+        Sala {nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, tipoSala=LCC, reservas=[]}
 
     ]
 salaAula :: [Sala]
 salaAula = 
     [
-        Sala {nomeSala = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, tipoSala = 2, reservas = []}
+        Sala {nomeSala = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, tipoSala = Aula, reservas = []}
     ]
 
     -- teste teste outro
