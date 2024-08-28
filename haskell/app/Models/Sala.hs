@@ -6,7 +6,6 @@ import Data.Time (UTCTime)
 
 data Sala = Sala {
     nome :: String,
-    numeroSala :: Int,
     qtdeComputador :: Int, 
     qtdeCadeiras :: Int, 
     tipoSala :: TipoSala, -- Indica a qual tipo de sala se refere,
