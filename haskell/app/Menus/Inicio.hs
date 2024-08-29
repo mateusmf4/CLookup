@@ -1,7 +1,7 @@
 module Menus.Inicio where
 
 import System.Exit (exitSuccess)
-import Menus.Util (printMenuEscolhas)
+import Menus.Util (escolherOpcoes)
 import Menus.Cadastro (menuCadastro)
 import Menus.Login (menuLogin)
 import Menus.Calendario (menuCalendario)
@@ -31,12 +31,12 @@ menu = [
 menuInicio :: IO()
 menuInicio = do
     putStrLn $ Cores.amarelo ++ unlines menu ++ Cores.reseta
-    printMenuEscolhas [
-        ("Login", menuLogin),
-        ("Cadastro", menuCadastro),
-        ("Calendario", menuCalendario),
-        ("Sair", sair)
-        ]
+    escolherOpcoes [
+        menuLogin,
+        menuCadastro,
+        menuCalendario,
+        sair
+     ]
     -- loop infinito, já que o unico jeito de sair é utilizando a opção de sair
     menuInicio
 

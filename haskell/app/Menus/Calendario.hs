@@ -6,12 +6,7 @@ import Data.Time.Calendar.Month (Month)
 import Control.Monad (forM_)
 import Data.List (intercalate)
 import System.Console.ANSI (clearScreen)
-
-resetaCor:: String
-resetaCor = "\ESC[0m"
-
-amarelo :: String
-amarelo = "\ESC[38;5;208m"  
+import qualified Menus.Cores as Cores
 
 calendario :: [String] 
 calendario = [
@@ -23,7 +18,7 @@ calendario = [
 menuCalendario :: IO ()
 menuCalendario = do
     clearScreen
-    putStrLn $ amarelo ++ unlines calendario ++ resetaCor
+    putStrLn $ Cores.amarelo ++ unlines calendario ++ Cores.reseta
     today <- utctDay <$> getCurrentTime
     drawCalendar today
 

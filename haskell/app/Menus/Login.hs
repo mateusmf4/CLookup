@@ -5,12 +5,7 @@ import Menus.Logado (menuLogado)
 import Repository (fetchEstudante, fetchProfessor)
 import Data.Maybe (isJust)
 import System.Console.ANSI (clearScreen)
-
-resetaCor:: String
-resetaCor = "\ESC[0m"
-
-amarelo :: String
-amarelo = "\ESC[38;5;208m"  
+import qualified Menus.Cores as Cores
 
 login :: [String] 
 login = [
@@ -22,7 +17,7 @@ login = [
 menuLogin :: IO()
 menuLogin = do
     clearScreen
-    putStrLn $ amarelo ++ unlines login ++ resetaCor
+    putStrLn $ Cores.amarelo ++ unlines login ++ Cores.reseta
     matricula <- readLnPrompt "Digite sua matrícula: "
     estudante <- Repository.fetchEstudante matricula
     professor <- Repository.fetchProfessor matricula
