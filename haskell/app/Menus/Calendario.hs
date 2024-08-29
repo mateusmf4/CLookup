@@ -5,9 +5,25 @@ import Data.Time.Calendar
 import Data.Time.Calendar.Month (Month)
 import Control.Monad (forM_)
 import Data.List (intercalate)
+import System.Console.ANSI (clearScreen)
+
+resetaCor:: String
+resetaCor = "\ESC[0m"
+
+amarelo :: String
+amarelo = "\ESC[38;5;208m"  
+
+calendario :: [String] 
+calendario = [
+   "╔══════════════════════════════════════════════════════════╗",
+   "║                       CALENDÁRIO                         ║",
+   "╚══════════════════════════════════════════════════════════╝"
+ ]
 
 menuCalendario :: IO ()
 menuCalendario = do
+    clearScreen
+    putStrLn $ amarelo ++ unlines calendario ++ resetaCor
     today <- utctDay <$> getCurrentTime
     drawCalendar today
 

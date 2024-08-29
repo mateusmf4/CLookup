@@ -4,10 +4,25 @@ import Menus.Util (printBanner, readLnPrompt)
 import Menus.Logado (menuLogado)
 import Repository (fetchEstudante, fetchProfessor)
 import Data.Maybe (isJust)
+import System.Console.ANSI (clearScreen)
+
+resetaCor:: String
+resetaCor = "\ESC[0m"
+
+amarelo :: String
+amarelo = "\ESC[38;5;208m"  
+
+login :: [String] 
+login = [
+   "╔══════════════════════════════════════════════════════════╗",
+   "║                       LOGIN                              ║",
+   "╚══════════════════════════════════════════════════════════╝"
+ ]
 
 menuLogin :: IO()
 menuLogin = do
-    printBanner
+    clearScreen
+    putStrLn $ amarelo ++ unlines login ++ resetaCor
     matricula <- readLnPrompt "Digite sua matrícula: "
     estudante <- Repository.fetchEstudante matricula
     professor <- Repository.fetchProfessor matricula

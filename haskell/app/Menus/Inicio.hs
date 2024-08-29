@@ -9,7 +9,6 @@ import Menus.Calendario (menuCalendario)
 menuInicio :: IO()
 menuInicio = do
     printBanner
-    putStrLn "Bem vindo ao Sistema CLookup!\n"
     printMenuEscolhas [
         ("Login", menuLogin),
         ("Cadastro", menuCadastro),
