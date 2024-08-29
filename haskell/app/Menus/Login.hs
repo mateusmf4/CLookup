@@ -1,6 +1,6 @@
 module Menus.Login where
 
-import Menus.Util (printBanner, readLnPrompt)
+import Menus.Util (readLnPrompt)
 import Menus.Logado (menuLogado)
 import Repository (fetchEstudante, fetchProfessor)
 import Data.Maybe (isJust)

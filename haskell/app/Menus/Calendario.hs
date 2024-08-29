@@ -56,7 +56,7 @@ drawCalendar day = do
 
     let thisMonthDay = dayToMonthDay day
     forM_ (zip ([0..] :: [Int]) allWeeks) $ \(i, week) -> do
-        let dayCells' = flattenLists $ map (\d -> do
+        let dayCells' = concatCols $ map (\d -> do
                 let monthDay = dayToMonthDay d
                 let filled = thisMonthDay == monthDay
                 drawDay monthDay filled
@@ -68,6 +68,9 @@ drawCalendar day = do
     where
         dayToMonthDay d = let (_, _, x) = toGregorian d in x
 
+-- Divide uma lista baseado em uma condição, incluindo o item responsavel.
+-- Listas vazias no final são removidas
+-- splitWhen even [1,3,4,5,6,71] = [[1,3,4], [5,6], [71]]
 splitWhen :: (a -> Bool) -> [a] -> [[a]]
 splitWhen condition list =
     case impl [] list of
@@ -78,8 +81,10 @@ splitWhen condition list =
         impl (b:bs) (x:xs) = impl ((if condition x then [[], b ++ [x]] else [b ++ [x]]) ++ bs) xs
         impl buf [] = buf
 
-flattenLists :: [[String]] -> [String]
-flattenLists [] = []
-flattenLists lists = do
+-- Concatena todas as colunas de uma matriz
+-- [["a", "b"], ["c", "d"]] -> ["ac", "bd"]
+concatCols :: [[String]] -> [String]
+concatCols [] = []
+concatCols lists = do
     let l = length $ head lists
     map (\i -> concatMap (!! i) lists) [0..(l-1)]

@@ -1,17 +1,12 @@
 module Menus.Cadastro where
 
-import Menus.Util (printBanner, getLinePrompt, readLnPrompt, printMenuEscolhas)
+import Menus.Util (getLinePrompt, readLnPrompt, printMenuEscolhas)
 import Menus.Logado (menuLogado)
 import System.Console.ANSI (clearScreen)
+import qualified Menus.Cores as Cores
 
 import qualified Controllers.EstudanteController as EstudanteController
 import qualified Controllers.ProfessorController as ProfessorController
-
-resetaCor:: String
-resetaCor = "\ESC[0m"
-
-amarelo :: String
-amarelo = "\ESC[38;5;208m"  
 
 cadastro :: [String] 
 cadastro = [
@@ -23,7 +18,7 @@ cadastro = [
 menuCadastro :: IO()
 menuCadastro = do
     clearScreen
-    putStrLn $ amarelo ++ unlines cadastro ++ resetaCor
+    putStrLn $ Cores.amarelo ++ unlines cadastro ++ Cores.reseta
     putStrLn "Cadastrar como:\n"
     printMenuEscolhas [
         ("Estudante", cadastroEstudante),
