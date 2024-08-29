@@ -4,7 +4,7 @@ import System.Exit (exitSuccess)
 import Menus.Util (printBanner, printMenuEscolhas)
 import Menus.Cadastro (menuCadastro)
 import Menus.Login (menuLogin)
-import Menus.Calendario (showToday)
+import Menus.Calendario (menuCalendario)
 
 menuInicio :: IO()
 menuInicio = do
@@ -13,7 +13,7 @@ menuInicio = do
     printMenuEscolhas [
         ("Login", menuLogin),
         ("Cadastro", menuCadastro),
-        ("Calendario", showToday),
+        ("Calendario", menuCalendario),
         ("Sair", sair)
         ]
     -- loop infinito, já que o unico jeito de sair é utilizando a opção de sair
