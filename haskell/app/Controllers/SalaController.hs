@@ -1,6 +1,5 @@
 module Controllers.SalaController where
 import qualified Repository
-import Data.Maybe (isJust, isNothing)
 import Models.Sala
 import Data.List (deleteBy)
 
@@ -29,18 +28,6 @@ reservarSala :: Reserva -> Sala -> Maybe Sala
 reservarSala reserva sala 
     | disponibilidadeSala reserva sala = Just (sala { reservas = reserva : reservas sala })
     | otherwise = Nothing
-
-salas :: [Sala]
-salas =
-    [
-        Sala {nomeSala = "Patos", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 1, tipoSala=Monitoria, reservas=[]},
-        Sala {nomeSala = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 2, tipoSala=Monitoria, reservas=[]},
-        Sala {nomeSala = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 3, tipoSala=Monitoria, reservas=[]},
-        Sala {nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, numSala = 4, tipoSala=LCC, reservas=[]},
-        Sala {nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, numSala = 5, tipoSala=LCC, reservas=[]},
-        Sala {nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, numSala = 6, tipoSala=LCC, reservas=[]},
-        Sala {nomeSala = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, numSala = 7, tipoSala = Aula, reservas = []}
-    ]
 
     -- teste teste outro
 -- método: reservar uma sala -- maria
