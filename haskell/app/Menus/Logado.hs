@@ -8,7 +8,6 @@ import Control.Monad (forM_)
 import Utils (enumerate)
 import Models.Sala (Sala(nomeSala), Reserva (Reserva))
 import qualified Menus.Cores as Cores
-import GHC.RTS.Flags (TraceFlags(user))
 import System.Console.ANSI (clearScreen)
 import Controllers.EstudanteController (atualizaMonitor)
 import Models.Usuario (Usuario (Prof, Est), matriculaUsuario)

@@ -26,7 +26,6 @@ executable clookup
         Menus.Inicio
         Menus.Cadastro
         Menus.Util
-        Menus.Calendario
         Menus.Logado
         Menus.Login
         Menus.Cores

@@ -4,7 +4,6 @@ import System.Exit (exitSuccess)
 import Menus.Util (escolherOpcoes)
 import Menus.Cadastro (menuCadastro)
 import Menus.Login (menuLogin)
-import Menus.Calendario (menuCalendario)
 import qualified Menus.Cores as Cores
 
 menu :: [String]
@@ -21,8 +20,8 @@ menu = [
         "║       Menu:                                                                   ║",
         "║          " ++ Cores.reseta ++ Cores.negrito ++ "1. Login      " ++ Cores.amarelo ++ "                                                       ║",
         "║          " ++ Cores.reseta ++ Cores.negrito ++ "2. Cadastro   " ++ Cores.amarelo ++ "                                                       ║",
-        "║          " ++ Cores.reseta ++ Cores.negrito ++ "3. Calendário " ++ Cores.amarelo ++ "                                                       ║",
-        "║          " ++ Cores.reseta ++ Cores.negrito ++ "4. Sair       " ++ Cores.amarelo ++ "                                                       ║",
+        "║          " ++ Cores.reseta ++ Cores.negrito ++ "3. Sair       " ++ Cores.amarelo ++ "                                                       ║",
+        "║                                                                               ║",
         "║                                                                               ║",
         "║                                                          Digite a opção:      ║",
         "╚═══════════════════════════════════════════════════════════════════════════════╝"
@@ -34,7 +33,6 @@ menuInicio = do
     escolherOpcoes [
         menuLogin,
         menuCadastro,
-        menuCalendario,
         sair
      ]
     -- loop infinito, já que o unico jeito de sair é utilizando a opção de sair
