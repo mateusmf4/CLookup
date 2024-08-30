@@ -15,6 +15,7 @@ data Sala = Sala {
 } deriving (Generic, Show)
 
 data Reserva = Reserva {
+    matricula :: Int,   -- matricula de quem fez uma reserva, assim podemos verificar a questão da prioridade
     inicio :: UTCTime,  -- data e horário do início de uma reserva
     termino :: UTCTime  -- data e horário do término de uma reserva
 } deriving (Generic, Show)
