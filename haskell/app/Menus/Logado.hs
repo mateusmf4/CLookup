@@ -1,4 +1,4 @@
-module Menus.Logado where
+module CLookup.Menus.Logado where
 import Menus.Util (printMenuEscolhas)
 import System.Exit (exitSuccess)
 
@@ -8,7 +8,6 @@ import Utils (enumerate)
 import Models.Sala (Sala(nomeSala))
 import System.Console.ANSI (clearScreen)
 import qualified Menus.Cores as Cores
-
 
 bemVindo :: [String] 
 bemVindo = [

@@ -5,10 +5,9 @@ import Data.Aeson
 import Data.Time (UTCTime)
 
 data Sala = Sala {
-    nomeSala :: String,
-    qtdeComputador :: Int,
-    qtdeCadeiras :: Int,
+    -- Código único da sala
     numSala :: Int,
+    nomeSala :: String,
     -- Indica a qual tipo de sala se refere
     tipoSala :: TipoSala,
     -- Lista de reservas para a sala
@@ -22,7 +21,7 @@ data Reserva = Reserva {
     inicio :: UTCTime,
     -- data e horário do término de uma reserva
     termino :: UTCTime
-} deriving (Generic, Show)
+} deriving (Generic, Show, Eq)
 data TipoSala = LCC | Aula | Monitoria
     deriving (Show, Enum, Generic)
 
@@ -35,24 +34,16 @@ instance FromJSON Reserva
 instance ToJSON TipoSala
 instance FromJSON TipoSala
 
+salaPadrao :: Sala
+salaPadrao = Sala { numSala = -1, nomeSala = "", tipoSala = Aula, reservas = [] }
+
 salasPadroes :: [Sala]
 salasPadroes = [
-    Sala { nomeSala = "Patos", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 1, tipoSala= Monitoria, reservas=[] },
-    Sala { nomeSala = "Cuités", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 2, tipoSala= Monitoria, reservas=[] },
-    Sala { nomeSala = "Sousa", qtdeComputador = 0, qtdeCadeiras = 10, numSala = 3, tipoSala= Monitoria, reservas=[] },
-    Sala { nomeSala = "LCC 1", qtdeComputador = 40, qtdeCadeiras = 50, numSala = 4, tipoSala= LCC, reservas=[] },
-    Sala { nomeSala = "LCC 2", qtdeComputador = 40, qtdeCadeiras = 50, numSala = 5, tipoSala= LCC, reservas=[] },
-    Sala { nomeSala = "LCC 3", qtdeComputador = 130, qtdeCadeiras = 145, numSala = 6, tipoSala= LCC, reservas=[] },
-    Sala { nomeSala = "CP-01", qtdeComputador = 0, qtdeCadeiras = 45, numSala = 7, tipoSala = Aula, reservas = [] }
+    salaPadrao { numSala = 1, nomeSala = "Patos", tipoSala = Monitoria },
+    salaPadrao { numSala = 2, nomeSala = "Cuités", tipoSala = Monitoria },
+    salaPadrao { numSala = 3, nomeSala = "Sousa", tipoSala = Monitoria },
+    salaPadrao { numSala = 4, nomeSala = "LCC 1", tipoSala = LCC },
+    salaPadrao { numSala = 5, nomeSala = "LCC 2", tipoSala = LCC },
+    salaPadrao { numSala = 6, nomeSala = "LCC 3", tipoSala = LCC },
+    salaPadrao { numSala = 7, nomeSala = "CP-01", tipoSala = Aula }
  ]
-
---
---
---
---
---
---
---
---
---
---

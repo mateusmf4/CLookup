@@ -9,26 +9,24 @@ import Data.Aeson.Key (fromString)
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath (takeDirectory)
 import Control.Exception (try, IOException)
-import Data.List (find)
-import Data.Time (UTCTime)
-
-
 
 import Models.Estudante
 import Models.Professor
 import Models.Sala
+import Models.Usuario
 
 data DatabaseStruct = DatabaseStruct {
     estudantes :: KeyMap.KeyMap Estudante,
     professores :: KeyMap.KeyMap Professor,
-    salas :: [Sala]
+    salas :: KeyMap.KeyMap Sala
 } deriving (Generic, Show)
 
 instance ToJSON DatabaseStruct
 instance FromJSON DatabaseStruct
 
 defaultDatabaseStruct :: DatabaseStruct
-defaultDatabaseStruct = DatabaseStruct { estudantes = KeyMap.empty, professores = KeyMap.empty, salas = salasPadroes }
+defaultDatabaseStruct = DatabaseStruct { estudantes = KeyMap.empty, professores = KeyMap.empty, salas = salasPadroes' }
+    where salasPadroes' = KeyMap.fromList $ map (\s -> (fromString $ show $ numSala s, s)) salasPadroes
 
 databasePath :: FilePath
 databasePath = "./Database/dados.json"
@@ -66,11 +64,20 @@ fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . profess
 saveProfessor :: Professor -> IO ()
 saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert (fromString $ show $ matriculaProfessor professor) professor (professores db) })
 
+fetchUsuario :: Int -> IO (Maybe Usuario)
+fetchUsuario matricula = do
+    est <- fetchEstudante matricula
+    case est of
+        Just e -> return $ Just $ Est e
+        Nothing -> do
+            prof <- fetchProfessor matricula
+            return $ Prof <$> prof
+
 fetchAllSalas :: IO [Sala]
-fetchAllSalas = salas <$> loadDatabase
+fetchAllSalas = KeyMap.elems . salas <$> loadDatabase
 
 fetchSala :: Int -> IO (Maybe Sala)
-fetchSala numSalaId = find (\sala -> numSala sala == numSalaId) . salas <$> loadDatabase
+fetchSala numSalaId = KeyMap.lookup (fromString $ show numSalaId) . salas <$> loadDatabase
 
 saveSala :: Sala -> IO ()
-saveSala sala = alterDatabase (\db -> db { salas = sala : salas db })
+saveSala sala = alterDatabase (\db -> db { salas = KeyMap.insert (fromString $ show $ numSala sala) sala (salas db) })
