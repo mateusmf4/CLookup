@@ -1,18 +1,16 @@
 
 module Menus.Logado where
 
-import Menus.Util (printMenuEscolhas, readLnPrompt)
+import Menus.Util (printMenuEscolhas, readLnPrompt, getLinePrompt)
 import System.Exit (exitSuccess)
-
 import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
 import Utils (enumerate)
 import Models.Sala (Sala(nomeSala))
 import Models.Usuario
 import qualified Menus.Cores as Cores
-import GHC.RTS.Flags (TraceFlags(user))
-
-import Control.Monad.IO.Class (liftIO)
+import System.Console.ANSI (clearScreen)
+import Controllers.EstudanteController (atualizaMonitor)
 
 bemVindo :: [String] 
 bemVindo = [
