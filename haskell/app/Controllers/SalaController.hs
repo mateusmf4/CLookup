@@ -1,24 +1,28 @@
 module Controllers.SalaController where
-import qualified Repository
+import  Repository
 import Models.Sala
-import Data.List (deleteBy)
+import Data.List (deleteBy, delete)
+import Data.Time (UTCTime)
 
 -- Compara duas reservas e verifica se há conflito de horários.
 verificaConflito :: Reserva -> Reserva -> Bool
 verificaConflito r1 r2 = not (termino r1 <= inicio r2 || termino r2 <= inicio r1)
 
+-- Definindo uma função de comparação para deleteBy
+reservasIguais :: Reserva -> Reserva -> Bool
+reservasIguais r1 r2 = inicio r1 == inicio r2 && termino r1 == termino r2
 
--- Função para cancelar uma reserva específica
-cancelarReserva :: FilePath -> Reserva -> IO ()
-cancelarReserva caminho reservaParaCancelar = do
-    sala <- lerSalasDeArquivo caminho
-    case sala of
-        Just s -> do
-            let reservasAtualizadas = filter (not . reservasIguais reservaParaCancelar) (reservas s)
-            let salaAtualizada = s { reservas = reservasAtualizadas }
-            salvarSalasNoArquivo caminho salaAtualizada
+-- Função para cancelar uma reserva 
+cancelarReserva :: Int -> Reserva -> IO ()
+cancelarReserva numSalaId reservaParaCancelar = do
+    maybeSala <- fetchSala numSalaId
+    case maybeSala of
+        Just sala -> do
+            let reservasAtualizadas = deleteBy reservasIguais reservaParaCancelar (reservas sala)
+            let salaAtualizada = sala { reservas = reservasAtualizadas }
+            saveSala salaAtualizada
             putStrLn "Reserva cancelada com sucesso!"
-        Nothing -> putStrLn "Erro ao ler as reservas do arquivo."
+        Nothing -> putStrLn "Sala não encontrada."
 
 -- Verificando se uma determinada sala esta disponível.
 salaIndisponivel :: UTCTime -> Sala -> Bool
@@ -32,11 +36,7 @@ salasDisponiveis tempoAtual = filter (not . salaIndisponivel tempoAtual)
 salasIndisponiveis :: UTCTime -> [Sala] -> [Sala]
 salasIndisponiveis tempoAtual = filter (salaIndisponivel tempoAtual)
 
--- Reservando uma sala
-reservarSala :: Reserva -> Sala -> Maybe Sala
-reservarSala reserva sala
-    | disponibilidadeSala reserva sala = Just (sala { reservas = reserva : reservas sala })
-    | otherwise = Nothing
+
 
     -- teste teste outro
 -- método: reservar uma sala -- maria
