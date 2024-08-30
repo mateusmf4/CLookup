@@ -6,11 +6,12 @@ import System.Exit (exitSuccess)
 import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
 import Utils (enumerate)
-import Models.Sala (Sala(nomeSala))
-import Models.Usuario
+import Models.Sala (Sala(nomeSala), Reserva (Reserva))
 import qualified Menus.Cores as Cores
+import GHC.RTS.Flags (TraceFlags(user))
 import System.Console.ANSI (clearScreen)
 import Controllers.EstudanteController (atualizaMonitor)
+import Models.Usuario (Usuario (Prof, Est), matriculaUsuario)
 
 bemVindo :: [String]
 bemVindo = [
@@ -42,12 +43,14 @@ menuLogado user = do
         Est _ -> printMenuEscolhas [
             ("Ver Sala", menuVerSala),
             ("Reservar Sala", reservarSala user),
+            ("Cancelar Reserva", cancelarReserva user),
             ("Sair", exitSuccess)
             ]
         Prof _ ->  printMenuEscolhas [
             ("Ver Sala", menuVerSala),
             ("Reservar Sala", reservarSala user),
             ("Tornar usuário monitor", menuMonitor),
+            ("Cancelar Reserva", cancelarReserva user),
             ("Sair", exitSuccess)
             ]
     menuLogado user
@@ -64,14 +67,28 @@ reservarSala :: Usuario -> IO ()
 reservarSala user = do
     clearScreen
     numeroSala <- readLnPrompt "Digite o número da sala: "
-    horarioInicio <- lerDataHora "Digite o horário de início (DD/MM/YYYY HH:MM): "
-    horarioFim <- lerDataHora "Digite o horário de fim (DD/MM/YYYY HH:MM): "
+    horarioInicio <- lerDataHora "Digite o horário de início (DD/MM/AAAA HH:MM): "
+    horarioFim <- lerDataHora "Digite o horário de fim (DD/MM/AAAA HH:MM): "
 
     resposta <- SalaController.reservarSala numeroSala user horarioInicio horarioFim
     case resposta of
         Left erro -> putStrLn erro
         Right _ -> do
-            putStrLn "Reserva feita com sucesso!"
+            putStrLn "Reserva feita com sucesso!\n"
+
+cancelarReserva :: Usuario -> IO()
+cancelarReserva user = do
+    numeroSala <- readLnPrompt "Digite o número da sala: "
+    horarioInicio <- lerDataHora "Digite o horário de início (DD/MM/AAAA HH:MM): "
+    horarioFim <- lerDataHora "Digite o horário de fim (DD/MM/AAAA HH:MM): "
+    let reserva = Reserva (matriculaUsuario user) horarioInicio horarioFim
+    resposta <- SalaController.cancelarReserva numeroSala reserva
+    
+    case resposta of
+        Left erro -> putStrLn erro
+        Right _ -> do
+            putStrLn "Reserva cancelada com sucesso!\n"
+            menuVerSala
 
 menuMonitor :: IO()
 menuMonitor = do
