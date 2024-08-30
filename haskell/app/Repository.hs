@@ -9,6 +9,10 @@ import Data.Aeson.Key (fromString)
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath (takeDirectory)
 import Control.Exception (try, IOException)
+import Data.List (find)
+import Data.Time (UTCTime)
+
+
 
 import Models.Estudante
 import Models.Professor
@@ -59,8 +63,17 @@ fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . profess
 saveEstudante :: Estudante -> IO ()
 saveEstudante estudante = alterDatabase (\db -> db { estudantes = KeyMap.insert (fromString $ show $ matriculaEstudante estudante) estudante (estudantes db) })
 
+fetchSala :: Int -> IO (Maybe Sala)
+fetchSala numSalaId = do
+    db <- loadDatabase
+    return $ find (\sala -> numSala sala == numSalaId) (salas db)
+
+saveSala :: Sala -> IO ()
+saveSala sala = alterDatabase (\db -> db { salas = sala : salas db })
+
 saveProfessor :: Professor -> IO ()
 saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert (fromString $ show $ matriculaProfessor professor) professor (professores db) })
+
 
 fetchAllSalas :: IO [Sala]
 fetchAllSalas = salas <$> loadDatabase
