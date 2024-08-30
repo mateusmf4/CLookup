@@ -27,8 +27,9 @@ executable clookup
         Menus.Calendario
         Menus.Logado
         Menus.Login
+        Menus.Cores
 
-    build-depends:    base ^>=4.17.2.1, aeson, bytestring, directory, filepath, time
+    build-depends:    base ^>=4.17.2.1, aeson, bytestring, directory, filepath, time , ansi-terminal
 
     hs-source-dirs:   app
 

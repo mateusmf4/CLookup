@@ -1,6 +1,5 @@
 module Controllers.SalaController where
 import qualified Repository
-import Data.Maybe (isJust, isNothing)
 import Models.Sala
 import Data.List (deleteBy)
 

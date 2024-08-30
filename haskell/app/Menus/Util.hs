@@ -1,10 +1,5 @@
 module Menus.Util where
-import Control.Monad (forM_)
 import Text.Read (readMaybe)
-
-printBanner :: IO()
-printBanner = do
-    putStrLn "\n-------------------- CLookup --------------------\n"
 
 getLinePrompt :: String -> IO String
 getLinePrompt prompt = do
@@ -18,10 +13,7 @@ readLnPrompt prompt = do
 
 printMenuEscolhas :: [(String, IO ())] -> IO ()
 printMenuEscolhas escolhas = do
-    forM_ (zip [0..] escolhas) (\(i :: Int, (escolha, _)) ->
-        putStrLn $ show (i + 1) ++ "- " ++ escolha)
-    putStrLn ""
-    opcao' :: Maybe Int <- readMaybe <$> getLinePrompt "Digite a opção: "
+    opcao' :: Maybe Int <- readMaybe <$> getLinePrompt "::"
     let opcao = opcao' >>= (\e ->
             if e <= 0 || e > length escolhas
                 then Nothing

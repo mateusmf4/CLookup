@@ -1,14 +1,24 @@
 module Menus.Cadastro where
 
-import Menus.Util (printBanner, getLinePrompt, readLnPrompt, printMenuEscolhas)
+import Menus.Util (getLinePrompt, readLnPrompt, printMenuEscolhas)
 import Menus.Logado (menuLogado)
+import System.Console.ANSI (clearScreen)
+import qualified Menus.Cores as Cores
 
 import qualified Controllers.EstudanteController as EstudanteController
 import qualified Controllers.ProfessorController as ProfessorController
 
+cadastro :: [String] 
+cadastro = [
+   "╔══════════════════════════════════════════════════════════╗",
+   "║                       CADASTRO                           ║",
+   "╚══════════════════════════════════════════════════════════╝"
+ ]
+
 menuCadastro :: IO()
 menuCadastro = do
-    printBanner
+    clearScreen
+    putStrLn $ Cores.amarelo ++ unlines cadastro ++ Cores.reseta
     putStrLn "Cadastrar como:\n"
     printMenuEscolhas [
         ("Estudante", cadastroEstudante),
