@@ -8,9 +8,9 @@ import qualified Menus.Cores as Cores
 import qualified Controllers.EstudanteController as EstudanteController
 import qualified Controllers.ProfessorController as ProfessorController
 
-cadastro :: [String] 
+cadastro :: [String]
 cadastro = [
-   "╔══════════════════════════════════════════════════════════╗",                       
+   "╔══════════════════════════════════════════════════════════╗",
    "║         ____          _           _                      ║",
    "║        / ___|__ _  __| | __ _ ___| |_ _ __ ___           ║",
    "║       | |   / _` |/ _` |/ _` / __| __| '__/ _ |          ║",

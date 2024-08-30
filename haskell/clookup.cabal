@@ -16,6 +16,7 @@ executable clookup
     other-modules:
         Repository
         Utils
+        Logado
         Models.Estudante
         Models.Professor
         Models.Sala
