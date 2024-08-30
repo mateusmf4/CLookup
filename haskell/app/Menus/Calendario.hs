@@ -33,7 +33,7 @@ diaTextHeight :: Int
 diaTextHeight = 4
 
 drawDay :: Int -> Bool -> [String]
-drawDay nDay filled = [
+drawDay nDay filled = map (\s -> cor ++ s ++ Cores.reseta) [
     "+---+ ",
     "|" ++ mergeStrings (if filled then "###" else "   ") (show nDay) ++ "| ",
     if filled then "|###| " else "|   | ",
@@ -41,6 +41,7 @@ drawDay nDay filled = [
     ]
     where
         mergeStrings a b = take (length a - length b) a ++ b
+        cor = if filled then Cores.negrito else ""
 
 drawCalendar :: Day -> IO ()
 drawCalendar day = do

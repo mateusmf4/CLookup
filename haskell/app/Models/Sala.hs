@@ -6,22 +6,26 @@ import Data.Time (UTCTime)
 
 data Sala = Sala {
     nomeSala :: String,
-    qtdeComputador :: Int, 
-    qtdeCadeiras :: Int, 
+    qtdeComputador :: Int,
+    qtdeCadeiras :: Int,
     numSala :: Int,
-    tipoSala :: TipoSala, -- Indica a qual tipo de sala se refere,
-    reservas :: [Reserva]   -- lista de reservas para a sala. Por meio de cada horario e data agendada, eu poderia verificar se já 
-                            -- tem reserva para esse dia e horário ou se ta livre
+    -- Indica a qual tipo de sala se refere
+    tipoSala :: TipoSala,
+    -- Lista de reservas para a sala
+    reservas :: [Reserva]
 } deriving (Generic, Show)
 
 data Reserva = Reserva {
-    matricula :: Int,   -- matricula de quem fez uma reserva, assim podemos verificar a questão da prioridade
-    inicio :: UTCTime,  -- data e horário do início de uma reserva
-    termino :: UTCTime  -- data e horário do término de uma reserva
+    -- matricula de quem fez uma reserva, assim podemos verificar a questão da prioridade
+    matricula :: Int,
+    -- data e horário do início de uma reserva
+    inicio :: UTCTime,
+    -- data e horário do término de uma reserva
+    termino :: UTCTime
 } deriving (Generic, Show)
 data TipoSala = LCC | Aula | Monitoria
     deriving (Show, Enum, Generic)
-    
+
 instance ToJSON Sala
 instance FromJSON Sala
 
