@@ -9,7 +9,6 @@ import Control.Monad (forM_)
 import Utils (enumerate)
 import Models.Sala (Sala(nomeSala))
 import Models.Usuario
-import System.Console.ANSI (clearScreen)
 import qualified Menus.Cores as Cores
 import GHC.RTS.Flags (TraceFlags(user))
 
@@ -40,11 +39,19 @@ sala = [
 menuLogado :: Usuario -> IO ()
 menuLogado user = do
     putStrLn $ Cores.amarelo ++ unlines bemVindo ++ Cores.reseta
-    printMenuEscolhas [
-        ("Ver Sala", menuVerSala),
-        ("Reservar Sala", reservarSala user),
-        ("Sair", exitSuccess)
-        ]
+    putStrLn "Bem vindo ao menu logado\n"
+    case user of
+        Est _ -> printMenuEscolhas [
+            ("Ver Sala", menuVerSala),
+            ("Reservar Sala", return()),
+            ("Sair", exitSuccess)
+            ]
+        Prof _ ->  printMenuEscolhas [
+            ("Ver Sala", menuVerSala),
+            ("Reservar Sala", return()),
+            ("Tornar usuário monitor", menuMonitor),
+            ("Sair", exitSuccess)
+            ]
     menuLogado user
 
 menuVerSala :: IO ()
@@ -68,3 +75,12 @@ reservarSala user = do
         Right _ -> do
             putStrLn "Reserva feita com sucesso!"
             menuVerSala
+
+menuMonitor :: IO()
+menuMonitor = do
+    matricula <- getLinePrompt "Informe a matricula do aluno: "
+    valor <- atualizaMonitor (read matricula) True
+    case valor of
+        Left erro -> putStrLn erro
+        Right _ -> do
+            putStrLn "Monitor adicionado!\n"
