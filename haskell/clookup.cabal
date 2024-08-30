@@ -31,7 +31,7 @@ executable clookup
         Menus.Login
         Menus.Cores
 
-    build-depends:    base ^>=4.17.2.1, aeson, bytestring, directory, filepath, time , ansi-terminal
+    build-depends:    base ^>=4.17.2.1, aeson, bytestring, directory, filepath, time >= 1.12 , ansi-terminal
 
     hs-source-dirs:   app
 
