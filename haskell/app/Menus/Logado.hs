@@ -1,4 +1,5 @@
-module CLookup.Menus.Logado where
+module Menus.Logado where
+
 import Menus.Util (printMenuEscolhas)
 import System.Exit (exitSuccess)
 
@@ -6,6 +7,7 @@ import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
 import Utils (enumerate)
 import Models.Sala (Sala(nomeSala))
+import Models.Usuario
 import System.Console.ANSI (clearScreen)
 import qualified Menus.Cores as Cores
 
@@ -31,7 +33,7 @@ sala = [
    "╚══════════════════════════════════════════════════════════╝"
  ]
 
-menuLogado :: usuarioLogado -> IO ()
+menuLogado :: Usuario -> IO ()
 menuLogado user = do
     putStrLn $ Cores.amarelo ++ unlines bemVindo ++ Cores.reseta
     printMenuEscolhas [
