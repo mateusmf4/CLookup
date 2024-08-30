@@ -7,25 +7,34 @@ import Data.List (deleteBy)
 verificaConflito :: Reserva -> Reserva -> Bool
 verificaConflito r1 r2 = not (termino r1 <= inicio r2 || termino r2 <= inicio r1)
 
--- Compara duas reservas e verifica se são iguais.
-reservasIguais :: Reserva -> Reserva -> Bool
-reservasIguais r1 r2 = inicio r1 == inicio r2 && termino r1 == termino r2
+
+-- Função para cancelar uma reserva específica
+cancelarReserva :: FilePath -> Reserva -> IO ()
+cancelarReserva caminho reservaParaCancelar = do
+    sala <- lerSalasDeArquivo caminho
+    case sala of
+        Just s -> do
+            let reservasAtualizadas = filter (not . reservasIguais reservaParaCancelar) (reservas s)
+            let salaAtualizada = s { reservas = reservasAtualizadas }
+            salvarSalasNoArquivo caminho salaAtualizada
+            putStrLn "Reserva cancelada com sucesso!"
+        Nothing -> putStrLn "Erro ao ler as reservas do arquivo."
 
 -- Verificando se uma determinada sala esta disponível.
-disponibilidadeSala :: Reserva -> Sala -> Bool
-disponibilidadeSala novaReserva sala = 
-    not $ any (verificaConflito novaReserva) 
-      (reservas sala)
+salaIndisponivel :: UTCTime -> Sala -> Bool
+salaIndisponivel tempoAtual sala = any (\r -> inicio r <= tempoAtual && tempoAtual <= termino r) (reservas sala)
 
--- Cancelando uma reserva de Sala.
-cancelarReserva :: Reserva -> Sala -> Sala
-cancelarReserva reserva sala = sala { reservas = novasReservas }
-  where
-    novasReservas = deleteBy reservasIguais reserva (reservas sala)
+-- Retorna todas as salas disponíveis 
+salasDisponiveis :: UTCTime -> [Sala] -> [Sala]
+salasDisponiveis tempoAtual = filter (not . salaIndisponivel tempoAtual)
+
+-- Retorna todas as salas indisponíveis
+salasIndisponiveis :: UTCTime -> [Sala] -> [Sala]
+salasIndisponiveis tempoAtual = filter (salaIndisponivel tempoAtual)
 
 -- Reservando uma sala
 reservarSala :: Reserva -> Sala -> Maybe Sala
-reservarSala reserva sala 
+reservarSala reserva sala
     | disponibilidadeSala reserva sala = Just (sala { reservas = reserva : reservas sala })
     | otherwise = Nothing
 
