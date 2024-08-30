@@ -1,6 +1,7 @@
 module Menus.Util where
 import Text.Read (readMaybe)
 import Control.Monad (forM_)
+import Data.Time (UTCTime, defaultTimeLocale, parseTimeM)
 
 getLinePrompt :: String -> IO String
 getLinePrompt prompt = do
@@ -30,3 +31,13 @@ escolherOpcoes escolhas = do
     case opcao of
         Nothing -> putStrLn "Erro: Opção invalida!"
         Just i -> escolhas !! (i - 1)
+
+lerDataHora :: String -> IO UTCTime
+lerDataHora prompt = do
+    line <- getLinePrompt prompt
+    let time' :: Maybe UTCTime = parseTimeM True defaultTimeLocale "%d/%m/%Y %H:%M" line
+    case time' of
+        Nothing -> do
+            putStrLn "Erro ao ler data. Formato requirido é \"DD/MM/YYYY HH:MM\""
+            lerDataHora prompt
+        Just time -> return time
