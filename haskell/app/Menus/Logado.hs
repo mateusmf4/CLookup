@@ -1,5 +1,4 @@
 module Menus.Logado where
-import Menus.Util (printMenuEscolhas)
 import System.Exit (exitSuccess)
 
 import qualified Controllers.SalaController as SalaController
@@ -7,15 +6,49 @@ import Control.Monad (forM_)
 import Utils (enumerate)
 import Models.Sala (Sala(nomeSala))
 import Models.Usuario
+import qualified Menus.Cores as Cores
+import System.Console.ANSI (clearScreen)
+import Menus.Util (printMenuEscolhas, getLinePrompt)
+import Controllers.EstudanteController (atualizaMonitor)
+
+bemVindo :: [String] 
+bemVindo = [
+   "╔══════════════════════════════════════════════════════════╗",    
+   "║    ____                  __     ___           _          ║",
+   "║   | __ )  ___ _ __ ___   | |   / (_)_ __   __| | ___     ║",
+   "║   |  _ | / _ | '_ ` _ |   | | / /| | '_ | / _` |/ _ |    ║",
+   "║   | |_) |  __/ | | | | |   | V / | | | | | (_| | (_) |   ║",
+   "║   |____/ |___|_| |_| |_|    |_/  |_|_| |_||__,_||___/    ║",
+   "╚══════════════════════════════════════════════════════════╝"
+ ]
+
+sala :: [String] 
+sala = [
+   "╔══════════════════════════════════════════════════════════╗",    
+   "║                ____        _                             ║",
+   "║               / ___|  __ _| | __ _                       ║",
+   "║               |___ | / _` | |/ _` |                      ║",
+   "║                ___) | (_| | | (_| |                      ║",
+   "║               |____/ |__,_|_||__,_|                      ║",
+   "╚══════════════════════════════════════════════════════════╝"
+ ]
 
 menuLogado :: Usuario -> IO ()
 menuLogado user = do
+    putStrLn $ Cores.amarelo ++ unlines bemVindo ++ Cores.reseta
     putStrLn "Bem vindo ao menu logado\n"
-    printMenuEscolhas [
-        ("Ver Sala", menuVerSala),
-        ("Reservar Sala", return ()),
-        ("Sair", exitSuccess)
-        ]
+    case user of
+        Est _ -> printMenuEscolhas [
+            ("Ver Sala", menuVerSala),
+            ("Reservar Sala", return()),
+            ("Sair", exitSuccess)
+            ]
+        Prof _ ->  printMenuEscolhas [
+            ("Ver Sala", menuVerSala),
+            ("Reservar Sala", return()),
+            ("Tornar usuário monitor", menuMonitor),
+            ("Sair", exitSuccess)
+            ]
     menuLogado user
 
 menuVerSala :: IO ()
