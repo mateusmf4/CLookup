@@ -4,9 +4,14 @@ import Models.Sala
 import Data.List (deleteBy, delete)
 import Data.Time (UTCTime)
 
--- Compara duas reservas e verifica se há conflito de horários.
-verificaConflito :: Reserva -> Reserva -> Bool
-verificaConflito r1 r2 = not (termino r1 <= inicio r2 || termino r2 <= inicio r1)
+-- recebe uma reserva existente e uma lista de reservas e verifica se alguma das reservas na lista conflita com a reserva existente
+verificaConflito :: Reserva -> [Reserva] -> Bool
+verificaConflito reservaExistente = any (conflitoReservas reservaExistente)
+
+-- verifica se duas reservas conflitam, ou seja, se os períodos de início e término se sobrepõem.
+conflitoReservas :: Reserva -> Reserva -> Bool
+conflitoReservas (Reserva _ inicio1 termino1) (Reserva _ inicio2 termino2) =
+  inicio1 < termino2 && inicio2 < termino1
 
 -- Definindo uma função de comparação para deleteBy
 reservasIguais :: Reserva -> Reserva -> Bool
@@ -36,7 +41,11 @@ salasDisponiveis tempoAtual = filter (not . salaIndisponivel tempoAtual)
 salasIndisponiveis :: UTCTime -> [Sala] -> [Sala]
 salasIndisponiveis tempoAtual = filter (salaIndisponivel tempoAtual)
 
-
+reservaSala :: Sala -> Int -> UTCTime -> UTCTime -> [Reserva] -> Maybe Reserva
+reservaSala sala matricula inicio termino reservas
+  | verificaConflito (Reserva matricula inicio termino) reservas = Nothing
+  | salaIndisponivel inicio sala = Nothing
+  | otherwise = Just (Reserva matricula inicio termino)
 
     -- teste teste outro
 -- método: reservar uma sala -- maria
