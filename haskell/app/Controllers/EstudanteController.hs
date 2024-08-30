@@ -24,7 +24,3 @@ atualizaMonitor matricula ehMonitor = do
             Repository.saveEstudante atualizado
             return $ Right atualizado
 
--- método: reservar uma sala
--- método: verificar as salas disponíveis e indisponíveis
--- método: cancelar uma reserva
--- método: atualizar uma reserva
