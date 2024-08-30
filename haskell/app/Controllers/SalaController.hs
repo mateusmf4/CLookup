@@ -6,7 +6,7 @@ import Data.Time (UTCTime)
 
 -- recebe uma reserva existente e uma lista de reservas e verifica se alguma das reservas na lista conflita com a reserva existente
 verificaConflito :: Reserva -> [Reserva] -> Bool
-verificaConflito reservaExistente = any (conflitoReservas reservaExistente)
+verificaConflito reservaExistente reservas = any (\r -> conflitoReservas reservaExistente r) reservas
 
 -- verifica se duas reservas conflitam, ou seja, se os períodos de início e término se sobrepõem.
 conflitoReservas :: Reserva -> Reserva -> Bool
