@@ -1,9 +1,8 @@
 
 module Menus.Logado where
 
-import Menus.Util (printMenuEscolhas, readLnPrompt)
+import Menus.Util (printMenuEscolhas, readLnPrompt, getLinePrompt)
 import System.Exit (exitSuccess)
-
 import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
 import Utils (enumerate)
@@ -12,6 +11,8 @@ import Models.Usuario
 import qualified Menus.Cores as Cores
 import GHC.RTS.Flags (TraceFlags(user))
 import System.Console.ANSI (clearScreen)
+import System.Console.ANSI (clearScreen)
+import Controllers.EstudanteController (atualizaMonitor)
 
 bemVindo :: [String] 
 bemVindo = [
@@ -42,12 +43,12 @@ menuLogado user = do
     case user of
         Est _ -> printMenuEscolhas [
             ("Ver Sala", menuVerSala),
-            ("Reservar Sala", return()),
+            ("Reservar Sala", reservarSala user),
             ("Sair", exitSuccess)
             ]
         Prof _ ->  printMenuEscolhas [
             ("Ver Sala", menuVerSala),
-            ("Reservar Sala", return()),
+            ("Reservar Sala", reservarSala user),
             ("Tornar usuário monitor", menuMonitor),
             ("Sair", exitSuccess)
             ]
@@ -65,8 +66,8 @@ reservarSala :: Usuario -> IO ()
 reservarSala user = do
     clearScreen
     numeroSala <- readLnPrompt "Digite o número da sala: "
-    horarioInicioStr <- readLnPrompt "Digite o horário de início (HH:MM): "
-    horarioFimStr <- readLnPrompt "Digite o horário de fim (HH:MM): "
+    horarioInicio <- readLnPrompt "Digite o horário de início (HH:MM): "
+    horarioFim <- readLnPrompt "Digite o horário de fim (HH:MM): "
 
     resposta <- SalaController.reservarSala numeroSala user horarioInicio horarioFim 
     case resposta of
