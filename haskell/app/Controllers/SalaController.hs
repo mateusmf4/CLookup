@@ -6,7 +6,7 @@ import Data.Time (UTCTime)
 
 -- recebe uma reserva existente e uma lista de reservas e verifica se alguma das reservas na lista conflita com a reserva existente
 verificaConflito :: Reserva -> [Reserva] -> Bool
-verificaConflito reservaExistente reservas = any (\r -> conflitoReservas reservaExistente r) reservas
+verificaConflito reservaExistente reservas = any (\r -> conflitoReservas reservaExistente r || conflitoReservas r reservaExistente) reservas
 
 -- verifica se duas reservas conflitam, ou seja, se os períodos de início e término se sobrepõem.
 conflitoReservas :: Reserva -> Reserva -> Bool
@@ -41,13 +41,40 @@ salasDisponiveis tempoAtual = filter (not . salaIndisponivel tempoAtual)
 salasIndisponiveis :: UTCTime -> [Sala] -> [Sala]
 salasIndisponiveis tempoAtual = filter (salaIndisponivel tempoAtual)
 
-reservaSala :: Sala -> Int -> UTCTime -> UTCTime -> [Reserva] -> Maybe Reserva
-reservaSala sala matricula inicio termino reservas
-  | verificaConflito (Reserva matricula inicio termino) reservas = Nothing
-  | salaIndisponivel inicio sala = Nothing
-  | otherwise = Just (Reserva matricula inicio termino)
+-- Reserva uma sala
+reservarSala :: Int -> Int -> UTCTime -> UTCTime -> IO ()
+reservarSala numSalaId matricula inicio termino = do
+  maybeSala <- fetchSala numSalaId
+  case maybeSala of
+    Just sala -> do
+      let reserva = Reserva matricula inicio termino
+      if verificaConflito reserva (reservas sala) then
+        putStrLn "Sala não disponível para reserva."
+      else do
+        let reservasAtualizadas = reservas sala ++ [reserva]
+        let salaAtualizada = sala { reservas = reservasAtualizadas }
+        saveSala salaAtualizada
+        putStrLn "Sala reservada com sucesso!"
+    Nothing -> putStrLn "Sala não encontrada."
 
-    -- teste teste outro
+-- Atualiza uma reserva
+atualizarReserva :: Int -> Reserva -> IO ()
+atualizarReserva numSalaId reservaAtualizada = do
+  maybeSala <- fetchSala numSalaId
+  case maybeSala of
+    Just sala -> do
+      let reservasAtualizadas = map (\r -> if inicio r == inicio reservaAtualizada && termino r == termino reservaAtualizada then reservaAtualizada else r) (reservas sala)
+      let salaAtualizada = sala { reservas = reservasAtualizadas }
+      saveSala salaAtualizada
+      putStrLn "Reserva atualizada com sucesso!"
+    Nothing -> putStrLn "Sala não encontrada."
+
+-- Lista todas as salas
+listarSalas :: IO [Sala]
+listarSalas = do
+  fetchAllSalas
+
+
 -- método: reservar uma sala -- maria
 -- método: verificar as salas disponíveis e indisponíveis -- gaby
 -- método: cancelar uma reserva -- gaby
