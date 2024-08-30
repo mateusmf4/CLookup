@@ -11,8 +11,7 @@ import Models.Sala (Sala(nomeSala))
 import Models.Usuario
 import qualified Menus.Cores as Cores
 import GHC.RTS.Flags (TraceFlags(user))
-
-import Control.Monad.IO.Class (liftIO)
+import System.Console.ANSI (clearScreen)
 
 bemVindo :: [String] 
 bemVindo = [
@@ -66,8 +65,8 @@ reservarSala :: Usuario -> IO ()
 reservarSala user = do
     clearScreen
     numeroSala <- readLnPrompt "Digite o número da sala: "
-    horarioInicio <- readLnPrompt "Digite o horário de início (HH:MM): "
-    horarioFim <- readLnPrompt "Digite o horário de fim (HH:MM): "
+    horarioInicioStr <- readLnPrompt "Digite o horário de início (HH:MM): "
+    horarioFimStr <- readLnPrompt "Digite o horário de fim (HH:MM): "
 
     resposta <- SalaController.reservarSala numeroSala user horarioInicio horarioFim 
     case resposta of
