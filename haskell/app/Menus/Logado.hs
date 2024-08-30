@@ -5,11 +5,10 @@ import System.Exit (exitSuccess)
 import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
 import Utils (enumerate)
-import Models.Sala (Sala(nomeSala))
+import Models.Sala
+import Models.Usuario
 
--- TODO: trocar esse `a` por um tipo UsuarioLogado sla
-
-menuLogado :: a -> IO ()
+menuLogado :: Usuario -> IO ()
 menuLogado user = do
     putStrLn "Bem vindo ao menu logado\n"
     printMenuEscolhas [

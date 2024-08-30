@@ -16,10 +16,10 @@ executable clookup
     other-modules:
         Repository
         Utils
-        Logado
         Models.Estudante
         Models.Professor
         Models.Sala
+        Models.Usuario
         Controllers.EstudanteController
         Controllers.ProfessorController
         Controllers.SalaController

@@ -4,7 +4,7 @@ import Repository
 import Models.Sala
 import Data.List (delete)
 import Data.Time (UTCTime)
-import Logado
+import Models.Usuario
 
 -- Retorna todas as reservas que estão conflitando com a reserva passada
 reservasConflitantes :: Reserva -> [Reserva] -> [Reserva]
@@ -16,7 +16,7 @@ seReservaConflita (Reserva _ inicio1 termino1) (Reserva _ inicio2 termino2) =
    (inicio2 < termino1 && inicio2 > inicio1) || (inicio1 < termino2 && inicio1 > inicio2)
 
 -- Reserva uma sala
-reservarSala :: Int -> UsuarioLogado -> UTCTime -> UTCTime -> IO (Either String Sala)
+reservarSala :: Int -> Usuario -> UTCTime -> UTCTime -> IO (Either String Sala)
 reservarSala numSalaId usuario inicio termino = do
     maybeSala <- fetchSala numSalaId
     case maybeSala of

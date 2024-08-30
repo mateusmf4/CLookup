@@ -7,6 +7,7 @@ import qualified Menus.Cores as Cores
 
 import qualified Controllers.EstudanteController as EstudanteController
 import qualified Controllers.ProfessorController as ProfessorController
+import Models.Usuario (Usuario(Est, Prof))
 
 cadastro :: [String]
 cadastro = [
@@ -40,7 +41,7 @@ cadastroEstudante = do
         Left erro -> putStrLn erro
         Right user -> do
             putStrLn "Cadastro feito com succeso!"
-            menuLogado user
+            menuLogado $ Est user
 
 cadastroProfessor :: IO()
 cadastroProfessor = do
@@ -52,4 +53,4 @@ cadastroProfessor = do
         Left erro -> putStrLn erro
         Right user -> do
             putStrLn "Cadastro feito com succeso!"
-            menuLogado user
+            menuLogado $ Prof user

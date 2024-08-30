@@ -6,9 +6,9 @@ import Data.Maybe (isJust)
 
 cadastro :: String -> Int -> Bool -> IO (Either String Estudante)
 cadastro nome matricula monitor = do
-    existe <- isJust <$> Repository.fetchEstudante matricula
+    existe <- isJust <$> Repository.fetchUsuario matricula
     if existe then do
-        return $ Left "Estudante com mesma matricula já existe!"
+        return $ Left "Usuário com mesma matricula já existe!"
     else do
         let estudante = Estudante { nomeEstudante = nome, matriculaEstudante = matricula, monitorEstudante = monitor }
         Repository.saveEstudante estudante

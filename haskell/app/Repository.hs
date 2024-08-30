@@ -13,7 +13,7 @@ import Control.Exception (try, IOException)
 import Models.Estudante
 import Models.Professor
 import Models.Sala
-import Logado
+import Models.Usuario
 
 data DatabaseStruct = DatabaseStruct {
     estudantes :: KeyMap.KeyMap Estudante,
@@ -64,7 +64,7 @@ fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . profess
 saveProfessor :: Professor -> IO ()
 saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert (fromString $ show $ matriculaProfessor professor) professor (professores db) })
 
-fetchUsuario :: Int -> IO (Maybe UsuarioLogado)
+fetchUsuario :: Int -> IO (Maybe Usuario)
 fetchUsuario matricula = do
     est <- fetchEstudante matricula
     case est of
