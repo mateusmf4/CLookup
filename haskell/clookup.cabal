@@ -15,6 +15,7 @@ executable clookup
 
     other-modules:
         Repository
+        Utils
         Models.Estudante
         Models.Professor
         Models.Sala

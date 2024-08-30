@@ -27,17 +27,17 @@ menuCalendario = do
     drawCalendar today
 
 diaTextWidth :: Int
-diaTextWidth = 5
+diaTextWidth = 6
 
 diaTextHeight :: Int
 diaTextHeight = 4
 
 drawDay :: Int -> Bool -> [String]
 drawDay nDay filled = [
-    "+---+",
-    "|" ++ mergeStrings (if filled then "###" else "   ") (show nDay) ++ "|",
-    if filled then "|###|" else "|   |",
-    "+---+"
+    "+---+ ",
+    "|" ++ mergeStrings (if filled then "###" else "   ") (show nDay) ++ "| ",
+    if filled then "|###| " else "|   | ",
+    "+---+ "
     ]
     where
         mergeStrings a b = take (length a - length b) a ++ b

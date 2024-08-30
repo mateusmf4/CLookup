@@ -57,23 +57,20 @@ alterDatabase f = do
 fetchEstudante :: Int -> IO (Maybe Estudante)
 fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudantes <$> loadDatabase
 
-fetchProfessor :: Int -> IO (Maybe Professor)
-fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . professores <$> loadDatabase
-
 saveEstudante :: Estudante -> IO ()
 saveEstudante estudante = alterDatabase (\db -> db { estudantes = KeyMap.insert (fromString $ show $ matriculaEstudante estudante) estudante (estudantes db) })
 
-fetchSala :: Int -> IO (Maybe Sala)
-fetchSala numSalaId = do
-    db <- loadDatabase
-    return $ find (\sala -> numSala sala == numSalaId) (salas db)
-
-saveSala :: Sala -> IO ()
-saveSala sala = alterDatabase (\db -> db { salas = sala : salas db })
+fetchProfessor :: Int -> IO (Maybe Professor)
+fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . professores <$> loadDatabase
 
 saveProfessor :: Professor -> IO ()
 saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert (fromString $ show $ matriculaProfessor professor) professor (professores db) })
 
-
 fetchAllSalas :: IO [Sala]
 fetchAllSalas = salas <$> loadDatabase
+
+fetchSala :: Int -> IO (Maybe Sala)
+fetchSala numSalaId = find (\sala -> numSala sala == numSalaId) . salas <$> loadDatabase
+
+saveSala :: Sala -> IO ()
+saveSala sala = alterDatabase (\db -> db { salas = sala : salas db })
