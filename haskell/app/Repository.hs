@@ -56,11 +56,17 @@ fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudan
 fetchProfessor :: Int -> IO (Maybe Professor)
 fetchProfessor matricula = KeyMap.lookup (fromString $ show matricula) . professores <$> loadDatabase
 
+fetchSala :: Int -> IO (Maybe Sala)
+fetchSala numSala = KeyMap.lookup (fromString $ show numSala) . sala <$> loadDatabase
+
 saveEstudante :: Estudante -> IO ()
 saveEstudante estudante = alterDatabase (\db -> db { estudantes = KeyMap.insert (fromString $ show $ matriculaEstudante estudante) estudante (estudantes db) })
 
 saveProfessor :: Professor -> IO ()
 saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert (fromString $ show $ matriculaProfessor professor) professor (professores db) })
+
+saveSala :: Sala -> IO() 
+saveSala sala = alterDatabase (\db -> db { sala = KeyMap.insert (fromString $ show $ numSala sala) sala (salas db)})
 
 fetchAllSalas :: IO [Sala]
 fetchAllSalas = salas <$> loadDatabase
