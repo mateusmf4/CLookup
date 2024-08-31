@@ -1,9 +1,11 @@
+-- Esse modelo contem a definição e funções auxiliares para o tipo Usuario.
 module Models.Usuario where
 
 import Models.Estudante
 import Models.Professor
 
 -- Representa um usuario que está logado no sistema, podendo ser um estudante ou um professor.
+-- Serve como uma abstração sobre estudante e professor, visto que ambos possuem caracteristicas em comum.
 data Usuario = Est Estudante | Prof Professor deriving (Show)
 
 -- Calcula a prioridade de um usuario logado no sistema,
