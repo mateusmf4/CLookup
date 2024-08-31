@@ -4,11 +4,11 @@
 
 O projeto permite que professores e alunos reservem salas, com diferentes níveis de prioridade.
 
-<img src="https://github.com/user-attachments/assets/9af9bfe0-f88c-4e93-a62f-0d4d2cf5a665"></img>
+<img src="https://github.com/user-attachments/assets/d50fb6c1-ea09-43bf-a367-97f151740065"></img>
 
 <p>
-<img width="49%" src="https://github.com/user-attachments/assets/b1c39ee3-214a-4b91-973d-05ee2dbda08d"></img>
-<img width="49%" src="https://github.com/user-attachments/assets/033f6702-4ff7-446a-bc8c-4ed967810b82"></img>
+  <img width="49%" src="https://github.com/user-attachments/assets/e243a77f-62ff-4ebc-af6a-6f5de1290550"></img>
+  <img width="49%" src="https://github.com/user-attachments/assets/bfe52202-30ce-4c98-8497-4c3538ee73c4"></img>
 </p>
 
 O mesmo projeto será feito nas linguagens Haskell e Prolog.
