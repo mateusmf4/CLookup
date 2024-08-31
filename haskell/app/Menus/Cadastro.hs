@@ -1,6 +1,6 @@
 module Menus.Cadastro where
 
-import Menus.Util (getLinePrompt, readLnPrompt, printMenuEscolhas)
+import Menus.Util (getLinePrompt, readLnPrompt, printMenuEscolhas, aguardeEnter)
 import Menus.Logado (menuLogado)
 import System.Console.ANSI (clearScreen)
 import qualified Menus.Cores as Cores
@@ -23,7 +23,7 @@ cadastro = [
 menuCadastro :: IO()
 menuCadastro = do
     clearScreen
-    putStrLn $ Cores.amarelo ++ unlines cadastro ++ Cores.reseta
+    putStrLn $ Cores.laranja ++ unlines cadastro ++ Cores.reseta
     putStrLn "Cadastrar como:\n"
     printMenuEscolhas [
         ("Estudante", cadastroEstudante),
@@ -38,9 +38,12 @@ cadastroEstudante = do
 
     valor <- EstudanteController.cadastro nome matricula False
     case valor of
-        Left erro -> putStrLn erro
+        Left erro -> do
+            putStrLn erro
+            aguardeEnter
         Right user -> do
             putStrLn "Cadastro feito com succeso!"
+            aguardeEnter
             menuLogado $ Est user
 
 cadastroProfessor :: IO()
@@ -50,7 +53,10 @@ cadastroProfessor = do
 
     valor <- ProfessorController.cadastro nome matricula
     case valor of
-        Left erro -> putStrLn erro
+        Left erro -> do
+            putStrLn erro
+            aguardeEnter
         Right user -> do
             putStrLn "Cadastro feito com succeso!"
+            aguardeEnter
             menuLogado $ Prof user

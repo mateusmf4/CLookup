@@ -4,6 +4,7 @@ module Menus.Util where
 import Text.Read (readMaybe)
 import Control.Monad (forM_)
 import Data.Time (UTCTime, defaultTimeLocale, parseTimeM)
+import qualified Menus.Cores as Cores
 
 -- Retorna uma mensagem no console e aguarda a entrada do usuário, retornando essa entrada como String.
 getLinePrompt :: String -> IO String
@@ -16,6 +17,11 @@ readLnPrompt :: Read a => String -> IO a
 readLnPrompt prompt = do
     putStr prompt
     readLn
+
+aguardeEnter ::IO ()
+aguardeEnter = do
+    _ <- getLinePrompt $ Cores.ciano ++ "\nPressione enter para continuar..." ++ Cores.reseta
+    return ()
 
 -- Exibe o menu de escolhas do Sistema.
 printMenuEscolhas :: [(String, IO ())] -> IO ()
@@ -35,7 +41,9 @@ escolherOpcoes escolhas = do
                 else return e
             )
     case opcao of
-        Nothing -> putStrLn "Erro: Opção invalida!"
+        Nothing -> do
+            putStrLn "Erro: Opção invalida!"
+            aguardeEnter
         Just i -> escolhas !! (i - 1)
 
 -- Ler uma String em formato de data-hora e a transforma no tipo UTCTime, retornando-o.

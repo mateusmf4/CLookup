@@ -1,16 +1,15 @@
 
 module Menus.Logado where
 
-import Menus.Util (printMenuEscolhas, readLnPrompt, getLinePrompt, lerDataHora)
+import Menus.Util (printMenuEscolhas, readLnPrompt, lerDataHora, aguardeEnter)
 import System.Exit (exitSuccess)
 import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
-import Utils (enumerate)
-import Models.Sala (Sala(nomeSala), Reserva (Reserva))
+import Models.Sala (Sala(nomeSala, numSala), Reserva (Reserva))
 import qualified Menus.Cores as Cores
 import System.Console.ANSI (clearScreen)
 import Controllers.EstudanteController (atualizaMonitor)
-import Models.Usuario (Usuario (Prof, Est), matriculaUsuario)
+import Models.Usuario (Usuario (Prof, Est), matriculaUsuario, nomeUsuario)
 
 bemVindo :: [String]
 bemVindo = [
@@ -36,8 +35,9 @@ textoSala = [
 
 menuLogado :: Usuario -> IO ()
 menuLogado user = do
-    putStrLn $ Cores.amarelo ++ unlines bemVindo ++ Cores.reseta
-    putStrLn "Bem vindo ao menu logado\n"
+    clearScreen
+    putStrLn $ Cores.laranja ++ unlines bemVindo ++ Cores.reseta
+    putStrLn $ "Bem vindo ao sistema, " ++ nomeUsuario user ++ "!\n"
     case user of
         Est _ -> printMenuEscolhas [
             ("Ver Sala", menuVerSala),
@@ -48,8 +48,8 @@ menuLogado user = do
         Prof _ ->  printMenuEscolhas [
             ("Ver Sala", menuVerSala),
             ("Reservar Sala", reservarSala user),
-            ("Tornar usuário monitor", menuMonitor),
             ("Cancelar Reserva", cancelarReserva user),
+            ("Tornar estudante monitor", menuMonitor),
             ("Sair", exitSuccess)
             ]
     menuLogado user
@@ -57,14 +57,14 @@ menuLogado user = do
 menuVerSala :: IO ()
 menuVerSala = do
     clearScreen
-    putStrLn $ Cores.amarelo ++ unlines textoSala ++ Cores.reseta
+    putStrLn $ Cores.laranja ++ unlines textoSala ++ Cores.reseta
     salas <- SalaController.listarSalas
-    forM_ (enumerate salas) $ \(i, sala) -> do
-        putStrLn $ show (i + 1) ++ ". " ++ nomeSala sala
+    forM_ salas $ \sala -> do
+        putStrLn $ show (numSala sala) ++ ". " ++ nomeSala sala
+    aguardeEnter
 
 reservarSala :: Usuario -> IO ()
 reservarSala user = do
-    clearScreen
     numeroSala <- readLnPrompt "Digite o número da sala: "
     horarioInicio <- lerDataHora "Digite o horário de início (DD/MM/AAAA HH:MM): "
     horarioFim <- lerDataHora "Digite o horário de fim (DD/MM/AAAA HH:MM): "
@@ -74,6 +74,7 @@ reservarSala user = do
         Left erro -> putStrLn erro
         Right _ -> do
             putStrLn "Reserva feita com sucesso!\n"
+    aguardeEnter
 
 cancelarReserva :: Usuario -> IO()
 cancelarReserva user = do
@@ -87,14 +88,14 @@ cancelarReserva user = do
         Left erro -> putStrLn erro
         Right _ -> do
             putStrLn "Reserva cancelada com sucesso!\n"
-            menuVerSala
+    aguardeEnter
 
 menuMonitor :: IO()
 menuMonitor = do
-    clearScreen
-    matricula <- getLinePrompt "Informe a matricula do aluno: "
-    valor <- atualizaMonitor (read matricula) True
+    matricula <- readLnPrompt "Informe a matricula do aluno: "
+    valor <- atualizaMonitor matricula True
     case valor of
         Left erro -> putStrLn erro
         Right _ -> do
             putStrLn "Monitor adicionado!\n"
+    aguardeEnter

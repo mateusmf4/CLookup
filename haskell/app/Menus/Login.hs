@@ -1,7 +1,7 @@
 -- O módulo Login enquadra funções que irão se utilizadas para login, no menu do sistema.
 module Menus.Login where
 -- Importações necessárias para o funcionamento do código.
-import Menus.Util (readLnPrompt)
+import Menus.Util (readLnPrompt, aguardeEnter)
 import Menus.Logado (menuLogado)
 import System.Console.ANSI (clearScreen)
 import qualified Menus.Cores as Cores
@@ -24,11 +24,11 @@ login = [
 menuLogin :: IO()
 menuLogin = do
     clearScreen
-    putStrLn $ Cores.amarelo ++ unlines login ++ Cores.reseta
+    putStrLn $ Cores.laranja ++ unlines login ++ Cores.reseta
     matricula <- readLnPrompt "Digite sua matrícula: "
     maybeUser <- Repository.fetchUsuario matricula
     case maybeUser of
         Just usuario -> menuLogado usuario
         Nothing -> do
             putStrLn "Não existe usuário com essa matrícula!"
-            return()
+            aguardeEnter

@@ -5,6 +5,7 @@ import Menus.Util (escolherOpcoes)
 import Menus.Cadastro (menuCadastro)
 import Menus.Login (menuLogin)
 import qualified Menus.Cores as Cores
+import System.Console.ANSI (clearScreen)
 
 menu :: [String]
 menu = [
@@ -18,9 +19,9 @@ menu = [
         "║              `.____ .'[___]'.__.'  '.__.'[__|  |_]'.__.'_/|_____|             ║",
         "║                                                                               ║",
         "║       Menu:                                                                   ║",
-        "║          " ++ Cores.reseta ++ Cores.negrito ++ "1. Login      " ++ Cores.amarelo ++ "                                                       ║",
-        "║          " ++ Cores.reseta ++ Cores.negrito ++ "2. Cadastro   " ++ Cores.amarelo ++ "                                                       ║",
-        "║          " ++ Cores.reseta ++ Cores.negrito ++ "3. Sair       " ++ Cores.amarelo ++ "                                                       ║",
+        "║          " ++ Cores.reseta ++ Cores.negrito ++ "1. Login      " ++ Cores.laranja ++ "                                                       ║",
+        "║          " ++ Cores.reseta ++ Cores.negrito ++ "2. Cadastro   " ++ Cores.laranja ++ "                                                       ║",
+        "║          " ++ Cores.reseta ++ Cores.negrito ++ "3. Sair       " ++ Cores.laranja ++ "                                                       ║",
         "║                                                                               ║",
         "║                                                                               ║",
         "║                                                          Digite a opção:      ║",
@@ -29,7 +30,8 @@ menu = [
 
 menuInicio :: IO()
 menuInicio = do
-    putStrLn $ Cores.amarelo ++ unlines menu ++ Cores.reseta
+    clearScreen
+    putStrLn $ Cores.laranja ++ unlines menu ++ Cores.reseta
     escolherOpcoes [
         menuLogin,
         menuCadastro,
