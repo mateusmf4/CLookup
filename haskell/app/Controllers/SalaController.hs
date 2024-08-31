@@ -14,8 +14,8 @@ reservasConflitantes reserva = filter (seReservaConflita reserva)
 -- Verifica se duas reservas conflitam, ou seja, se os períodos de início e término se sobrepõem.
 seReservaConflita :: Reserva -> Reserva -> Bool
 seReservaConflita (Reserva _ inicio1 termino1) (Reserva _ inicio2 termino2) =
-   (inicio2 < termino1 && inicio2 > inicio1) || (inicio1 < termino2 && inicio1 > inicio2)
-
+    not (termino1 <= inicio2 || inicio1 >= termino2)
+    
 -- Reserva uma sala
 reservarSala :: Int -> Usuario -> UTCTime -> UTCTime -> IO (Either String Sala)
 reservarSala numSalaId usuario inicio termino = do
