@@ -42,7 +42,10 @@ menuLogado :: Usuario -> IO ()
 menuLogado user = do
     clearScreen
     putStrLn $ Cores.laranja ++ unlines bemVindo ++ Cores.reseta
-    putStrLn $ "Bem vindo ao sistema, " ++ nomeUsuario user ++ "!\n"
+    let extra = case user of
+            Est e -> if monitorEstudante e then "[MONITOR] " else ""
+            Prof _ -> "[PROFESSOR] "
+    putStrLn $ "Bem vindo ao sistema, " ++ extra ++ nomeUsuario user ++ "!\n"
     case user of
         Est _ -> printMenuEscolhas [
             ("Ver Reservas de Sala", menuVerSala),
