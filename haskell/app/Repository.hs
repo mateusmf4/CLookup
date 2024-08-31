@@ -86,11 +86,11 @@ saveProfessor professor = alterDatabase (\db -> db { professores = KeyMap.insert
 fetchUsuario :: Int -> IO (Maybe Usuario)
 fetchUsuario matricula = do
     est <- fetchEstudante matricula
-    case est of
-        Just e -> return $ Just $ Est e
-        Nothing -> do
-            prof <- fetchProfessor matricula
-            return $ Prof <$> prof
+    prof <- fetchProfessor matricula
+    case (est, prof) of
+        (Just e, _) -> return $ Just $ Est e
+        (_, Just p) -> return $ Just $ Prof p
+        _ -> return Nothing
 
 -- Retorna todas as salas cadastradas no sistema.
 fetchAllSalas :: IO [Sala]
