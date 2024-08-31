@@ -1,5 +1,6 @@
+-- A modulo SalaController tem por intuito fornecer as funções para controlar e manipular os serviços de Sala no sistema.
 module Controllers.SalaController where
-
+-- Importações necessárias para o funcionamento do código.
 import Repository
 import Models.Sala
 import Data.List (delete)
@@ -51,18 +52,15 @@ cancelarReserva numSalaId reservaParaCancelar = do
     case maybeSala of
         Nothing -> return $ Left "Sala não encontrada."
         Just sala -> do
-            let reservasAtualizadas = delete reservaParaCancelar (reservas sala)
-            let salaAtualizada = sala { reservas = reservasAtualizadas }
-            saveSala salaAtualizada
-            return $ Right salaAtualizada
+            if reservaParaCancelar `notElem` reservas sala
+                then return $ Left "Reserva não existente."
+                else do 
+                    let reservasAtualizadas = delete reservaParaCancelar (reservas sala)
+                    let salaAtualizada = sala { reservas = reservasAtualizadas }
+                    saveSala salaAtualizada
+                    return $ Right salaAtualizada
 
 -- Lista todas as salas
 listarSalas :: IO [Sala]
 listarSalas = do
     fetchAllSalas
-
-
--- método: reservar uma sala -- maria
--- método: verificar as salas disponíveis e indisponíveis -- gaby
--- método: cancelar uma reserva -- gaby
--- método: atualizar uma reserva -- maria

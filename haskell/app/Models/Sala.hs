@@ -1,9 +1,11 @@
+-- O módulo Sala tem por intuito modelar a face da Sala no sistema, definindo seus parâmetros e atributos 
 module Models.Sala where
-
+-- Importações necessárias para funcionamento do código.
 import GHC.Generics
 import Data.Aeson
 import Data.Time (UTCTime)
 
+-- Definindo os dados necessários para criação de uma sala.
 data Sala = Sala {
     -- Código único da sala
     numSala :: Int,
@@ -14,6 +16,7 @@ data Sala = Sala {
     reservas :: [Reserva]
 } deriving (Generic, Show)
 
+-- Definindo os dados necessários para criação de reserva em sala.
 data Reserva = Reserva {
     -- matricula de quem fez uma reserva, assim podemos verificar a questão da prioridade
     matricula :: Int,
@@ -25,6 +28,7 @@ data Reserva = Reserva {
 data TipoSala = LCC | Aula | Monitoria
     deriving (Show, Enum, Generic)
 
+-- Instâncias do JSON
 instance ToJSON Sala
 instance FromJSON Sala
 
@@ -34,6 +38,7 @@ instance FromJSON Reserva
 instance ToJSON TipoSala
 instance FromJSON TipoSala
 
+-- Definindo as salas que o prédio possui por padrão.
 salaPadrao :: Sala
 salaPadrao = Sala { numSala = -1, nomeSala = "", tipoSala = Aula, reservas = [] }
 

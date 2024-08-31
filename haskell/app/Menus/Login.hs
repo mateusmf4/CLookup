@@ -1,11 +1,13 @@
+-- O módulo Login enquadra funções que irão se utilizadas para login, no menu do sistema.
 module Menus.Login where
-
+-- Importações necessárias para o funcionamento do código.
 import Menus.Util (readLnPrompt)
 import Menus.Logado (menuLogado)
 import System.Console.ANSI (clearScreen)
 import qualified Menus.Cores as Cores
 import qualified Repository
 
+-- Formata um cabeçalho para dar início ao login no sistema.
 login :: [String] 
 login = [
    "╔══════════════════════════════════════════════════════════╗", 
@@ -18,6 +20,7 @@ login = [
    "╚══════════════════════════════════════════════════════════╝"
  ]
 
+-- Apresenta propriamente a página Login, do sistema.
 menuLogin :: IO()
 menuLogin = do
     clearScreen
