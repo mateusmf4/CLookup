@@ -3,8 +3,10 @@ module Menus.Util where
 -- Importações necessárias para o funcionamento do código.
 import Text.Read (readMaybe)
 import Control.Monad (forM_)
-import Data.Time (UTCTime, defaultTimeLocale, parseTimeM)
+import Data.Time (UTCTime (utctDay), defaultTimeLocale, parseTimeM, formatTime)
 import qualified Menus.Cores as Cores
+
+import Models.Sala (Reserva (Reserva))
 
 -- Retorna uma mensagem no console e aguarda a entrada do usuário, retornando essa entrada como String.
 getLinePrompt :: String -> IO String
@@ -56,3 +58,15 @@ lerDataHora prompt = do
             putStrLn "Erro ao ler data. Formato requirido é \"DD/MM/AAAA HH:MM\""
             lerDataHora prompt
         Just time -> return time
+
+-- Formata uma reserva, mostrando o seu tempo inicial e tempo final.
+formatarReserva :: Reserva -> String
+formatarReserva r = do
+    let (Reserva _ inicio termino) = r
+    let mesmoDia = utctDay inicio == utctDay termino
+    
+    let inicioStr = formatTime defaultTimeLocale "%d/%m/%Y %H:%M" inicio
+    let terminoStr = if mesmoDia
+        then formatTime defaultTimeLocale "%H:%M" termino
+        else formatTime defaultTimeLocale "%d/%m/%Y %H:%M" termino
+    inicioStr ++ " até " ++ terminoStr

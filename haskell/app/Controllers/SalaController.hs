@@ -3,7 +3,7 @@ module Controllers.SalaController where
 -- Importações necessárias para o funcionamento do código.
 import Repository
 import Models.Sala
-import Data.List (delete)
+import Data.List (delete, sortBy)
 import Data.Time (UTCTime)
 import Models.Usuario
 
@@ -64,3 +64,18 @@ cancelarReserva numSalaId reservaParaCancelar = do
 listarSalas :: IO [Sala]
 listarSalas = do
     fetchAllSalas
+
+-- Retorna uma sala baseado no seu número de sala, se não for encontrada retorna um erro.
+getSala :: Int -> IO (Either String Sala)
+getSala nSala = do
+    maybeSala <- fetchSala nSala
+    case maybeSala of
+        Nothing -> return $ Left "Sala não encontrada."
+        Just sala -> return $ Right sala
+
+-- Retorna todas as reservas de uma sala que estão dentro de uma faixa de tempo.
+-- As reservas são retornadas ordenadas pelo tempo de inicio.
+salaReservasEmFaixa :: Sala -> UTCTime -> UTCTime -> [Reserva]
+salaReservasEmFaixa sala inicio termino = do
+    let rs = reservasConflitantes (Reserva (-1) inicio termino) (reservas sala)
+    sortBy (\(Reserva _ i1 _) (Reserva _ i2 _) -> compare i1 i2) rs

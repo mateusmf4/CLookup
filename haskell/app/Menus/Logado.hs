@@ -1,18 +1,20 @@
 module Menus.Logado where
 
 import System.Exit (exitSuccess)
-import Control.Monad (forM_)
+import Control.Monad (forM_, when)
 import System.Console.ANSI (clearScreen)
+import Data.Time (UTCTime(UTCTime), getCurrentTime, LocalTime (localDay), utcToLocalTime, getCurrentTimeZone, weekAllDays, DayOfWeek (Sunday), DayPeriod (dayPeriod, periodFirstDay, periodLastDay))
+import Data.Time.Calendar.Month (Month)
 
-import Menus.Util (printMenuEscolhas, readLnPrompt, lerDataHora, aguardeEnter)
+import Menus.Util (printMenuEscolhas, readLnPrompt, lerDataHora, aguardeEnter, formatarReserva)
 import qualified Menus.Cores as Cores
 
 import Models.Sala (Sala(nomeSala, numSala, tipoSala), Reserva (Reserva))
 import Models.Usuario (Usuario (Prof, Est), matriculaUsuario, nomeUsuario)
+import Models.Estudante (Estudante(matriculaEstudante, nomeEstudante, monitorEstudante))
 
 import qualified Controllers.SalaController as SalaController
 import qualified Controllers.EstudanteController as EstudanteController
-import Models.Estudante (Estudante(matriculaEstudante, nomeEstudante, monitorEstudante))
 
 bemVindo :: [String]
 bemVindo = [
@@ -43,20 +45,21 @@ menuLogado user = do
     putStrLn $ "Bem vindo ao sistema, " ++ nomeUsuario user ++ "!\n"
     case user of
         Est _ -> printMenuEscolhas [
-            ("Ver Sala", menuVerSala),
+            ("Ver Reservas de Sala", menuVerSala),
             ("Reservar Sala", reservarSala user),
             ("Cancelar Reserva", cancelarReserva user),
             ("Sair", exitSuccess)
             ]
-        Prof _ ->  printMenuEscolhas [
-            ("Ver Sala", menuVerSala),
+        Prof _ -> printMenuEscolhas [
+            ("Ver Reservas de Sala", menuVerSala),
             ("Reservar Sala", reservarSala user),
             ("Cancelar Reserva", cancelarReserva user),
-            ("Tornar estudante monitor", menuMonitor),
+            ("Tornar Estudante Monitor", menuMonitor),
             ("Sair", exitSuccess)
             ]
     menuLogado user
 
+-- Mostra e faz a lógica do menu de ver reservas de uma sala.
 menuVerSala :: IO ()
 menuVerSala = do
     clearScreen
@@ -64,7 +67,43 @@ menuVerSala = do
     salas <- SalaController.listarSalas
     forM_ salas $ \sala -> do
         putStrLn $ show (numSala sala) ++ ". " ++ nomeSala sala
+
+    nSala :: Int <- readLnPrompt "\nDigite o número da sala: "
+    sala' <- SalaController.getSala nSala
+
+    tzAtual <- getCurrentTimeZone
+    diaHoje <- localDay . utcToLocalTime tzAtual <$> getCurrentTime
+
+    let quaseMeiaNoite = 23 * 60 * 60 + 59 * 60 + 59
+
+    let inicioHoje = UTCTime diaHoje 0
+    let fimHoje = UTCTime diaHoje quaseMeiaNoite
+
+    let week = weekAllDays Sunday diaHoje
+    let inicioSemana = UTCTime (head week) 0
+    let fimSemana = UTCTime (last week) quaseMeiaNoite
+
+    let month = dayPeriod diaHoje :: Month
+    let inicioMes = UTCTime (periodFirstDay month) 0
+    let fimMes = UTCTime (periodLastDay month) quaseMeiaNoite
+
+    case sala' of
+        Left e -> putStrLn e
+        Right sala -> do
+            putStrLn "\nDeseja ver as reservas de que período?\n"
+            printMenuEscolhas [
+                ("Hoje", menuReservasTempo sala inicioHoje fimHoje),
+                ("Semana", menuReservasTempo sala inicioSemana fimSemana),
+                ("Mês", menuReservasTempo sala inicioMes fimMes)
+                ]
     aguardeEnter
+    where
+        menuReservasTempo sala inicio termino = do
+            let reservas = SalaController.salaReservasEmFaixa sala inicio termino
+            putStrLn $ "\n" ++ Cores.laranja ++ show (numSala sala) ++ ". " ++ nomeSala sala ++ " - " ++ show (tipoSala sala) ++ Cores.reseta
+            forM_ reservas $ \r -> do
+                putStrLn $ " - " ++ formatarReserva r
+            when (null reservas) $ putStrLn "  Nenhuma reserva nesse período."
 
 listarSalas :: IO ()
 listarSalas = do
