@@ -7,16 +7,22 @@ import Data.List (delete, sortBy)
 import Data.Time (UTCTime)
 import Models.Usuario
 
--- Retorna todas as reservas que estão conflitando com a reserva passada
+-- retorna todas as reservas que estão conflitando com a reserva passada.
+-- parametros: reserva a ser verificada e lista de reservas
+-- retorno: lista de reservas conflitantes
 reservasConflitantes :: Reserva -> [Reserva] -> [Reserva]
 reservasConflitantes reserva = filter (seReservaConflita reserva)
 
 -- Verifica se duas reservas conflitam, ou seja, se os períodos de início e término se sobrepõem.
+-- parametros: primeira reserva a ser verificada e a segunda reserva a ser verificadad
+-- retorno: true se as reservas conflitam, false caso contrário
 seReservaConflita :: Reserva -> Reserva -> Bool
 seReservaConflita (Reserva _ inicio1 termino1) (Reserva _ inicio2 termino2) =
     not (termino1 <= inicio2 || inicio1 >= termino2)
     
 -- Reserva uma sala
+-- parametros: numero da sala a ser reservada, usuario que esta fazendo a reserva, data e hora do inicio da reserva, data e hora do fim da reserva
+-- retorno: mensagem de terro ou a sala reservada
 reservarSala :: Int -> Usuario -> UTCTime -> UTCTime -> IO (Either String Sala)
 reservarSala numSalaId usuario inicio termino = do
     maybeSala <- fetchSala numSalaId
@@ -45,7 +51,9 @@ reservarSala numSalaId usuario inicio termino = do
                 saveSala salaAtualizada
                 return $ Right salaAtualizada
 
--- Função para cancelar uma reserva 
+-- Função para cancelar uma reserva
+-- parametros: numero da sala da reserva a ser cancelada e a reserva a ser cancelada
+-- retorno: mensagem de erro ou a sala atualizada 
 cancelarReserva :: Int -> Reserva -> IO (Either String Sala)
 cancelarReserva numSalaId reservaParaCancelar = do
     maybeSala <- fetchSala numSalaId
@@ -75,6 +83,7 @@ getSala nSala = do
 
 -- Retorna todas as reservas de uma sala que estão dentro de uma faixa de tempo.
 -- As reservas são retornadas ordenadas pelo tempo de inicio.
+-- parametros: sala a ser verificada, data e hora de inicio da faixa de tempo, data e hora do fim da faixa de tempo
 salaReservasEmFaixa :: Sala -> UTCTime -> UTCTime -> [Reserva]
 salaReservasEmFaixa sala inicio termino = do
     let rs = reservasConflitantes (Reserva (-1) inicio termino) (reservas sala)
