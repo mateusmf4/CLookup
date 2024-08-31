@@ -55,6 +55,9 @@ alterDatabase f = do
 fetchEstudante :: Int -> IO (Maybe Estudante)
 fetchEstudante matricula = KeyMap.lookup (fromString $ show matricula) . estudantes <$> loadDatabase
 
+fetchAllEstudantes :: IO [Estudante]
+fetchAllEstudantes = KeyMap.elems . estudantes <$> loadDatabase
+
 saveEstudante :: Estudante -> IO ()
 saveEstudante estudante = alterDatabase (\db -> db { estudantes = KeyMap.insert (fromString $ show $ matriculaEstudante estudante) estudante (estudantes db) })
 

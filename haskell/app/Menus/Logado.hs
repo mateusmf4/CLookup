@@ -1,15 +1,18 @@
-
 module Menus.Logado where
 
-import Menus.Util (printMenuEscolhas, readLnPrompt, lerDataHora, aguardeEnter)
 import System.Exit (exitSuccess)
-import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
-import Models.Sala (Sala(nomeSala, numSala, tipoSala), Reserva (Reserva))
-import qualified Menus.Cores as Cores
 import System.Console.ANSI (clearScreen)
-import Controllers.EstudanteController (atualizaMonitor)
+
+import Menus.Util (printMenuEscolhas, readLnPrompt, lerDataHora, aguardeEnter)
+import qualified Menus.Cores as Cores
+
+import Models.Sala (Sala(nomeSala, numSala, tipoSala), Reserva (Reserva))
 import Models.Usuario (Usuario (Prof, Est), matriculaUsuario, nomeUsuario)
+
+import qualified Controllers.SalaController as SalaController
+import qualified Controllers.EstudanteController as EstudanteController
+import Models.Estudante (Estudante(matriculaEstudante, nomeEstudante, monitorEstudante))
 
 bemVindo :: [String]
 bemVindo = [
@@ -104,8 +107,17 @@ cancelarReserva user = do
 
 menuMonitor :: IO()
 menuMonitor = do
+    clearScreen
+    -- Listar todos os estudantes cadastrados e suas matriculas
+    estudantes <- EstudanteController.listarEstudantes
+    putStrLn "Estudantes cadastrados:"
+    putStrLn $ Cores.ciano ++ "Matr. Nome" ++ Cores.reseta
+    forM_ estudantes $ \e -> do
+        putStrLn $ show (matriculaEstudante e) ++ ".  " ++ nomeEstudante e ++ (if monitorEstudante e then " - Monitor" else "")
+    putStrLn ""
+
     matricula <- readLnPrompt "Informe a matricula do aluno: "
-    valor <- atualizaMonitor matricula True
+    valor <- EstudanteController.atualizaMonitor matricula True
     case valor of
         Left erro -> putStrLn erro
         Right _ -> do

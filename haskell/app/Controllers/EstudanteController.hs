@@ -24,3 +24,5 @@ atualizaMonitor matricula ehMonitor = do
             Repository.saveEstudante atualizado
             return $ Right atualizado
 
+listarEstudantes :: IO [Estudante]
+listarEstudantes = Repository.fetchAllEstudantes
