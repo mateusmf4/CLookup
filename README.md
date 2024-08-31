@@ -7,6 +7,9 @@ O projeto permite que professores e alunos reservem salas, com diferentes nívei
 O mesmo projeto será feito nas linguagens Haskell e Prolog.
 
 ## Haskell
+O projeto foi desenvolvido usando GHC versão 9.4.8 e cabal versão 3.12.1.0. \
+É necessario versões recentes do GHC para rodar o projeto.
+
 Para executar o projeto em haskell, basta executar **dentro da pasta haskell**:
 ```
 cabal install aeson
