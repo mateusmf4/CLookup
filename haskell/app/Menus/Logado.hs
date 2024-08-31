@@ -5,7 +5,7 @@ import Menus.Util (printMenuEscolhas, readLnPrompt, lerDataHora, aguardeEnter)
 import System.Exit (exitSuccess)
 import qualified Controllers.SalaController as SalaController
 import Control.Monad (forM_)
-import Models.Sala (Sala(nomeSala, numSala), Reserva (Reserva))
+import Models.Sala (Sala(nomeSala, numSala, tipoSala), Reserva (Reserva))
 import qualified Menus.Cores as Cores
 import System.Console.ANSI (clearScreen)
 import Controllers.EstudanteController (atualizaMonitor)
@@ -63,8 +63,19 @@ menuVerSala = do
         putStrLn $ show (numSala sala) ++ ". " ++ nomeSala sala
     aguardeEnter
 
+listarSalas :: IO ()
+listarSalas = do
+    clearScreen
+    salas <- SalaController.listarSalas
+    putStrLn "Salas disponíveis:"
+    putStrLn $ Cores.ciano ++ "Num. Nome - Tipo" ++ Cores.reseta
+    forM_ salas $ \sala -> do
+        putStrLn $ show (numSala sala) ++ ".   " ++ nomeSala sala ++ " - " ++ show (tipoSala sala)
+    putStrLn ""
+
 reservarSala :: Usuario -> IO ()
 reservarSala user = do
+    listarSalas
     numeroSala <- readLnPrompt "Digite o número da sala: "
     horarioInicio <- lerDataHora "Digite o horário de início (DD/MM/AAAA HH:MM): "
     horarioFim <- lerDataHora "Digite o horário de fim (DD/MM/AAAA HH:MM): "
@@ -78,12 +89,13 @@ reservarSala user = do
 
 cancelarReserva :: Usuario -> IO()
 cancelarReserva user = do
+    listarSalas
     numeroSala <- readLnPrompt "Digite o número da sala: "
     horarioInicio <- lerDataHora "Digite o horário de início (DD/MM/AAAA HH:MM): "
     horarioFim <- lerDataHora "Digite o horário de fim (DD/MM/AAAA HH:MM): "
     let reserva = Reserva (matriculaUsuario user) horarioInicio horarioFim
     resposta <- SalaController.cancelarReserva numeroSala reserva
-    
+
     case resposta of
         Left erro -> putStrLn erro
         Right _ -> do
