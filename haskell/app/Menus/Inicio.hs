@@ -1,5 +1,7 @@
+-- Menu que inicializa o sistema
 module Menus.Inicio where
 
+-- Importações necessárias para o funcionamento adequado
 import System.Exit (exitSuccess)
 import Menus.Util (escolherOpcoes)
 import Menus.Cadastro (menuCadastro)
@@ -7,6 +9,7 @@ import Menus.Login (menuLogin)
 import qualified Menus.Cores as Cores
 import System.Console.ANSI (clearScreen)
 
+-- Tela inicial, menu que mostra as funcionalidades para o usuário
 menu :: [String]
 menu = [
         "╔═══════════════════════════════════════════════════════════════════════════════╗",
@@ -28,6 +31,7 @@ menu = [
         "╚═══════════════════════════════════════════════════════════════════════════════╝"
     ]
 
+-- Carrega o menu inicial para que o usuário consiga acessar uma determinada funcionalidade 
 menuInicio :: IO()
 menuInicio = do
     clearScreen
@@ -40,6 +44,7 @@ menuInicio = do
     -- loop infinito, já que o unico jeito de sair é utilizando a opção de sair
     menuInicio
 
+-- Função que interrompe o loop inicializado e finaliza a execução do menu principal
 sair :: IO()
 sair = do
     putStrLn "Até Mais!"
