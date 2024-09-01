@@ -1,3 +1,4 @@
+-- Menu onde pode ser feito o cadastro de usuarios
 module Menus.Cadastro where
 
 import Menus.Util (getLinePrompt, readLnPrompt, printMenuEscolhas, aguardeEnter)
@@ -20,6 +21,7 @@ cadastro = [
    "╚══════════════════════════════════════════════════════════╝"
  ]
 
+-- Menu que apresenta as escolhas de cadastro
 menuCadastro :: IO()
 menuCadastro = do
     clearScreen
@@ -31,6 +33,7 @@ menuCadastro = do
         ("Voltar", return ())
         ]
 
+-- Menu que cadastra um estudante
 cadastroEstudante :: IO()
 cadastroEstudante = do
     nome <- getLinePrompt "Nome: "
@@ -46,6 +49,7 @@ cadastroEstudante = do
             aguardeEnter
             menuLogado $ Est user
 
+-- Menu que cadastra um professor
 cadastroProfessor :: IO()
 cadastroProfessor = do
     nome <- getLinePrompt "Nome: "
