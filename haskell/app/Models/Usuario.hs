@@ -1,4 +1,4 @@
--- Esse modelo contem a definição e funções auxiliares para o tipo Usuario.
+-- Esse módulo contem a definição e funções auxiliares para o tipo Usuario.
 module Models.Usuario where
 
 import Models.Estudante
