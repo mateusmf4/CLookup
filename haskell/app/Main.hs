@@ -5,7 +5,8 @@ module Main where
 import Menus.Inicio (menuInicio)
 import System.IO (hSetBuffering, BufferMode (NoBuffering), stdout, hGetEncoding, mkTextEncoding, hSetEncoding, stderr, stdin, Handle)
 
--- deixa um handle seguro para imprimir caracteres unicode, se nao houver codificação definida, não faz nada, se tiver, cria uma nova codificação de texto
+-- permite que um handle imprima caracteres unicode no windows, em vez de lançar exceção.
+-- origem: https://stackoverflow.com/a/27652154
 makeSafe :: Handle -> IO ()
 makeSafe h = do
   ce' <- hGetEncoding h
