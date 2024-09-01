@@ -1,3 +1,5 @@
+-- O modulo logado enquadra funções do menu de quando o usuario loga no sistema, e as funções que
+-- podem ser feitas nele.
 module Menus.Logado where
 
 import System.Exit (exitSuccess)
@@ -38,6 +40,7 @@ textoSala = [
    "╚══════════════════════════════════════════════════════════╝"
  ]
 
+-- Apresenta o menu principal de um usuario logado, recebendo o usuario que está logado no sistema.
 menuLogado :: Usuario -> IO ()
 menuLogado user = do
     clearScreen
@@ -108,6 +111,7 @@ menuVerSala = do
                 putStrLn $ " - " ++ formatarReserva r
             when (null reservas) $ putStrLn "  Nenhuma reserva nesse período."
 
+-- Função de utilidade que somente imprime as salas cadastradas no sistema.
 listarSalas :: IO ()
 listarSalas = do
     clearScreen
@@ -118,6 +122,7 @@ listarSalas = do
         putStrLn $ show (numSala sala) ++ ".   " ++ nomeSala sala ++ " - " ++ show (tipoSala sala)
     putStrLn ""
 
+-- Função para o menu de reservar uma sala especifica em um horario
 reservarSala :: Usuario -> IO ()
 reservarSala user = do
     listarSalas
@@ -132,6 +137,7 @@ reservarSala user = do
             putStrLn "Reserva feita com sucesso!\n"
     aguardeEnter
 
+-- Função para o menu de cancelar uma reserva especifica
 cancelarReserva :: Usuario -> IO()
 cancelarReserva user = do
     listarSalas
@@ -147,6 +153,7 @@ cancelarReserva user = do
             putStrLn "Reserva cancelada com sucesso!\n"
     aguardeEnter
 
+-- Função para o menu de tornar um estudante especifico em um monitor.
 menuMonitor :: IO()
 menuMonitor = do
     clearScreen
