@@ -1,14 +1,11 @@
-% sala(NumSala, NomeSala)
-
-getNumSala(sala(X, _), X).
-getNomeSala(sala(_, X), X).
-
-salasPadroes([
-    sala(1, "Patos"),
-    sala(2, "Cuités"),
-    sala(3, "Sousa"),
-    sala(4, "LCC 1"),
-    sala(5, "LCC 2"),
-    sala(6, "LCC 3"),
-    sala(7, "CP-01")
-]).
+salasPadroes(R) :-
+    Padrao = sala{numSala: 0, nomeSala: "", reservas: []},   
+    R = [
+        Padrao.put(_{numSala: 1, nomeSala: "Patos"}),
+        Padrao.put(_{numSala: 2, nomeSala: "Cuités"}),
+        Padrao.put(_{numSala: 3, nomeSala: "Sousa"}),
+        Padrao.put(_{numSala: 4, nomeSala: "LCC 1"}),
+        Padrao.put(_{numSala: 5, nomeSala: "LCC 2"}),
+        Padrao.put(_{numSala: 6, nomeSala: "LCC 3"}),
+        Padrao.put(_{numSala: 7, nomeSala: "CP-01"})
+    ].
