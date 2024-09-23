@@ -1,3 +1,5 @@
+:- module(modelSala, [salasPadroes/1]).
+
 salasPadroes(R) :-
     Padrao = sala{numSala: 0, nomeSala: "", reservas: []},   
     R = [
