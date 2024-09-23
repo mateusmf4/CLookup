@@ -1,32 +1,32 @@
 :- module(inicio, [menuInicio/0]).
 
-:- use_module('Utils.pl').
-:- use_module('Login.pl').
-:- use_module('Cadastro.pl').
+:- use_module('Menus/Utils.pl').
+:- use_module('Menus/Login.pl', [menuLogin/0]).
+:- use_module('Menus/Cadastro.pl', [menuCadastro/0]).
 
-menu:- 
-    writeln("╔═══════════════════════════════════════════════════════════════════════════════╗"),
-    writeln("║                                                                               ║"),
-    writeln("║                 ______  __                 __               _______           ║"),
-    writeln("║               .' ___  |[  |               [  |  _          |_   __ |          ║"),
-    writeln("║             / .'   |_| | |  .--.    .--.  | | / ] __   _    | |__) |          ║"),
-    writeln("║             | |        | |/ .'`| |/ .'`| || '' < [  | | |   |  ___/           ║"),
-    writeln("║             | `.___.'| | || |__. || |__. || |`| | | |_/ |, _| |_              ║"),
-    writeln("║              `.____ .'[___]'.__.'  '.__.'[__|  |_]'.__.'_/|_____|             ║"),
-    writeln("║                                                                               ║"),
-    writeln("║       Menu:                                                                   ║"),
-    writeln("║          1. Login                                                             ║"),
-    writeln("║          2. Cadastro                                                          ║"),
-    writeln("║          3. Sair                                                              ║"),
-    writeln("║                                                                               ║"),
-    writeln("║                                                                               ║"),
-    writeln("║       Digite a opção:                                                         ║"),
-    writeln("╚═══════════════════════════════════════════════════════════════════════════════╝").
+printBanner :- 
+    printCor("&l╔═══════════════════════════════════════════════════════════════════════════════╗\n"),
+    printCor("║                                                                               ║\n"),
+    printCor("║                 ______  __                 __               _______           ║\n"),
+    printCor("║               .' ___  |[  |               [  |  _          |_   __ |          ║\n"),
+    printCor("║             / .'   |_| | |  .--.    .--.  | | / ] __   _    | |__) |          ║\n"),
+    printCor("║             | |        | |/ .'`| |/ .'`| || '' < [  | | |   |  ___/           ║\n"),
+    printCor("║             | `.___.'| | || |__. || |__. || |`| | | |_/ |, _| |_              ║\n"),
+    printCor("║              `.____ .'[___]'.__.'  '.__.'[__|  |_]'.__.'_/|_____|             ║\n"),
+    printCor("║                                                                               ║\n"),
+    printCor("║       Menu:                                                                   ║\n"),
+    printCor("║          &r&b1. Login    &r&l                                                         ║\n"),
+    printCor("║          &r&b2. Cadastro &r&l                                                         ║\n"),
+    printCor("║          &r&b3. Sair     &r&l                                                         ║\n"),
+    printCor("║                                                                               ║\n"),
+    printCor("║                                                                               ║\n"),
+    printCor("║       Digite a opção:                                                         ║\n"),
+    printCor("╚═══════════════════════════════════════════════════════════════════════════════╝&r\n").
 
 menuInicio :- 
-    menu,
+    printBanner,
     readNumber(I), 
-    (I == 1 -> menuLogin; I == 2 -> cadastro; I == 3 -> sair; writeln("Erro: Opção invalida!")),
+    (I == 1 -> menuLogin; I == 2 -> menuCadastro; I == 3 -> sair; writeln("Erro: Opção invalida!")),
     menuInicio.
 
 sair:- writeln("Até mais!"), halt(0).

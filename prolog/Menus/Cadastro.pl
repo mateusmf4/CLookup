@@ -1,6 +1,6 @@
-:- module(cadastro, [cadastro/0]).
+:- module(cadastro, [menuCadastro/0]).
 
-cadastro:-
+cadastro :-
     writeln("╔══════════════════════════════════════════════════════════╗"),
     writeln("║         ____          _           _                      ║"),
     writeln("║        / ___|__ _  __| | __ _ ___| |_ _ __ ___           ║"),
@@ -9,6 +9,6 @@ cadastro:-
     writeln("║        |____|__,_||__,_||__,_|___/|__|_|  |___/          ║"),
     writeln("╚══════════════════════════════════════════════════════════╝").
 
-menuCadastro:- 
+menuCadastro :- 
     cadastro,
-    writeln("Cadastrar como:\n")
+    writeln("Cadastrar como:\n").

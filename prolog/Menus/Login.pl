@@ -1,7 +1,8 @@
 :- module(login, [menuLogin/0]).
-:- use_module('Utils.pl').
 
-login:- 
+:- use_module('Menus/Utils.pl').
+
+login :- 
     writeln("╔══════════════════════════════════════════════════════════╗"), 
     writeln("║                _                _                        ║"),
     writeln("║               | |    ___   __ _(_)_ __                   ║"),
@@ -11,7 +12,7 @@ login:-
     writeln("║                           |___/                          ║"),
     writeln("╚══════════════════════════════════════════════════════════╝").
 
-menuLogin:-
+menuLogin :-
     login,
     writeln("Digite sua matrícula: "),
     readStr(M),
