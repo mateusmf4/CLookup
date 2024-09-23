@@ -24,3 +24,12 @@ cabal run
 ```
 
 No **Windows**, é recomendado rodar `chcp 65001` no terminal antes de rodar o projeto.
+
+## Prolog
+O projeto foi desenvolvido usando o SWI-Prolog versão 9.2.7. \
+É recomendado usar versões recente desse interpretador.
+
+Para executar o projeto em prolog, basta executar **dentro da pasta prolog**:
+```
+swipl -q -f init.pl -s Main.pl
+```
