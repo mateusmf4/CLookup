@@ -39,5 +39,3 @@ colorirChars(['&', X | T], R) :-
     !.
 colorirChars([H | T], [H | T1]) :- colorirChars(T, T1).
 colorirChars([], []).
-
-verifyUserExists(M) :- fetchUsuario(M, U), (U == M -> 1; 0).
