@@ -24,26 +24,24 @@ cadastroEstudante:-
     writeln("Nome: "), readStr(N),
     writeln("Matrícula: "), readNumber(M),
     atom_length(M, Length),
-    (Length =:= 9 ->
-        (verifyUserExists(M) == 0 -> 
-            newUsuario(M, N, estudante, User),
-            saveUsuario(User),
-            writeln("Cadastro realizado com sucesso!");
-            writeln("Usuário com mesma matricula já existe!")
-        );
-    writeln("Matrícula inválida!")),
+    (Length =\= 9 -> writeln("Matrícula inválida!"); 
+    (fetchUsuario(M, U) -> 
+        writeln("Usuário com mesma matricula já existe!");
+        newUsuario(M, N, estudante, User),
+        saveUsuario(User),
+        writeln("Cadastro realizado com sucesso!")
+    )),
     menuInicio.
 
 cadastroProfessor:-
     writeln("Nome: "), readStr(N),
     writeln("Matrícula: "), readNumber(M),
     atom_length(M, Length),
-    (Length =:= 9 ->
-        (verifyUserExists(M) == 0 -> 
-            newUsuario(M, N, professor, User),
-            saveUsuario(User),
-            writeln("Cadastro realizado com sucesso!");
-            writeln("Usuário com mesma matricula já existe!")
-        );
-    writeln("Matrícula inválida!")),
+    (Length =\= 9 -> writeln("Matrícula inválida!"); 
+    (fetchUsuario(M, U) -> 
+        writeln("Usuário com mesma matricula já existe!");
+        newUsuario(M, N, professor, User),
+        saveUsuario(User),
+        writeln("Cadastro realizado com sucesso!")
+    )),
     menuInicio.
