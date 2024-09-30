@@ -1,4 +1,4 @@
-:- module(utils, [readStr/1, readNumber/1, printCor/1, printCor/2]).
+:- module(utils, [readStr/1, readNumber/1, printCor/1, printCor/2, clearScreen/0]).
 
 readStr(R) :- read_line_to_string(user_input, R).
 readNumber(R) :- readStr(S), number_string(R, S).
@@ -39,3 +39,9 @@ colorirChars(['&', X | T], R) :-
     !.
 colorirChars([H | T], [H | T1]) :- colorirChars(T, T1).
 colorirChars([], []).
+
+% Limpa a tela do terminal
+clearScreen :-
+    (current_prolog_flag(windows, true) ->
+        process_create(path(cmd), ['/c', 'cls'], []);
+        shell('clear')).

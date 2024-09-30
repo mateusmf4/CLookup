@@ -1,4 +1,4 @@
-:- module(repository, [fetchUsuario/2, fetchAllUsuarios/2, saveUsuario/1, fetchSala/2, saveSala/1]).
+:- module(repository, [fetchUsuario/2, fetchAllUsuarios/2, saveUsuario/1, fetchSala/2, fetchAllSalas/1, saveSala/1]).
 
 :- use_module(library(http/json)).
 :- use_module(library(filesex)).
@@ -65,6 +65,11 @@ fetchSala(NumSala, Sala) :-
     loadDatabase(Dados),
     atom_number(Key, NumSala),
     Sala = Dados.salas.get(Key).
+
+% Retorna todas as salas cadastradas no sistema.
+fetchAllSalas(R) :-
+    loadDatabase(Dados),
+    dict_pairs(Dados.salas, _, Pairs), pairs_values(Pairs, R).
 
 % Adiciona uma nova sala no sistema, ou sobrescreve uma existente dado que ambas tenham o mesmo número de sala.
 saveSala(Sala) :-

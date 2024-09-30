@@ -1,5 +1,5 @@
 :- module(cadastro, [menuCadastro/0]).
-:- use_module('Utils.pl').
+:- use_module('Menus/Utils.pl').
 :- use_module('./Repository.pl').
 :- use_module('./Models/Usuario.pl').
 
@@ -13,7 +13,7 @@ cadastro:-
     writeln("╚══════════════════════════════════════════════════════════╝").
 
 menuCadastro:- 
-    shell(clear),
+    clearScreen,
     cadastro,
     writeln("Cadastrar como:\n"),
     writeln("1. Estudante"), writeln("2. Professor"), writeln("3. Voltar"),
