@@ -6,7 +6,7 @@
 :- use_module('Menus/Cadastro.pl', [menuCadastro/0]).
 :- use_module('Models/Sala.pl').
 :- use_module('Models/Usuario.pl').
-:- module(repository, [fetchUsuario/2, fetchAllUsuarios/2, saveUsuario/1, fetchSala/2, fetchAllSalas/1, saveSala/1, cancelarReservaSala/3]).
+:- module(repository, [fetchSala/1, fetchAllSalas/1, saveSala/1, cancelarReservaSala/2]).
 :- dynamic sala_numero/2.
 :- use_module(library(date)).
 :- use_module(library(readutil)).

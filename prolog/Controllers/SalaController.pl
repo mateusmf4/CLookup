@@ -1,6 +1,6 @@
 :- use_module(library(date)), use_module(models([usuario, sala, reserva])).
 :- module(sala_controller, [listar_salas/1]).
-:- use_module(repository).
+:- module(repository, [fetchSala/1, fetchAllSalas/1]).
 
 
 reserva_conflitantes(Reserva, Reservas, Conflitantes) :-
@@ -17,5 +17,5 @@ listar_salas(Salas) :-
 get_sala(NumeroSala, Resultado) :-
     repository:fetchSala(NumeroSala, MaybeSala),
     (MaybeSala = false -> 
-        Resultado = erro("Sala não encontrada.");
+        Resultado = erro('Sala não encontrada.');
         Resultado = sucesso(MaybeSala)).
