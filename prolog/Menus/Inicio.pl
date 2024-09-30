@@ -24,6 +24,7 @@ printBanner :-
     printCor("╚═══════════════════════════════════════════════════════════════════════════════╝&r\n").
 
 menuInicio :- 
+    shell(clear),
     printBanner,
     readNumber(I), 
     (I == 1 -> menuLogin; I == 2 -> menuCadastro; I == 3 -> sair; writeln("Erro: Opção invalida!")),

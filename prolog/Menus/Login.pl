@@ -13,6 +13,7 @@ login :-
     writeln("╚══════════════════════════════════════════════════════════╝").
 
 menuLogin :-
+    shell(clear),
     login,
     writeln("Digite sua matrícula: "),
     readStr(M),

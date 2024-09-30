@@ -13,6 +13,7 @@ cadastro:-
     writeln("╚══════════════════════════════════════════════════════════╝").
 
 menuCadastro:- 
+    shell(clear),
     cadastro,
     writeln("Cadastrar como:\n"),
     writeln("1. Estudante"), writeln("2. Professor"), writeln("3. Voltar"),
