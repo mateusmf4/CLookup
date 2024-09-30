@@ -35,11 +35,16 @@ saveDatabase(Dados) :-
     json_write_dict(Stream, Dados),
     close(Stream).
 
+% Garante que o tipo de um usuario é um atomo.
+converteUsuario(Usuario, R) :-
+    atom_string(TipoAtom, Usuario.tipo),
+    R = Usuario.put(_{tipo: TipoAtom}).
+
 % Procura um usuário no banco de dados pela matricula, se não for encontrado resulta em false.
 fetchUsuario(Matricula, Usuario) :-
     loadDatabase(Dados),
     atom_number(Key, Matricula),
-    Usuario = Dados.usuarios.get(Key).
+    converteUsuario(Dados.usuarios.get(Key), Usuario).
 
 % Predicado que verifica se usuario é de um tipo, usado em fetchAllUsuarios
 usuarioEhTipo(Tipo, Usuario) :-
@@ -50,7 +55,8 @@ fetchAllUsuarios(Tipo, R) :-
     loadDatabase(Dados),
     atom_string(Tipo, TipoString),
     dict_pairs(Dados.usuarios, _, Pairs), pairs_values(Pairs, Usuarios),
-    include(usuarioEhTipo(TipoString), Usuarios, R).
+    include(usuarioEhTipo(TipoString), Usuarios, Filtrado),
+    maplist(converteUsuario, Filtrado, R).
 
 % Adiciona um novo estudante no sistema, ou sobrescreve um existente dado que ambos tenham a mesma matricula.
 saveUsuario(Usuario) :-
