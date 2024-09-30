@@ -1,19 +1,15 @@
-
-:- module(logado, [menuLogado/0]).
+:- module(logado, [menu_logado/1]).
 
 :- use_module('Menus/Utils.pl').
 :- use_module('Menus/Login.pl', [menuLogin/0]).
 :- use_module('Menus/Cadastro.pl', [menuCadastro/0]).
+
 :- use_module('Models/Sala.pl').
 :- use_module('Models/Usuario.pl').
-:- module(repository, [fetchSala/1, fetchAllSalas/1, saveSala/1, cancelarReservaSala/2]).
-:- dynamic sala_numero/2.
+
+:- use_module('Repository.pl').
 :- use_module(library(date)).
 :- use_module(library(readutil)).
-:- dynamic usuario/1.
-
-clear_screen :-
-    shell('clear').
 
 bem_vindo :- 
     writeln("╔═══════════════════════════════════════════════════════════╗"), 
@@ -36,49 +32,45 @@ texto_sala :-
 
 % Apresenta o menu principal de um usuario logado, recebendo o usuario que está logado no sistema.
 menu_logado(Usuario) :-
-    clear_screen,
-    write('Bem-vindo ao sistema!'), nl,
-    Usuario.tipo = TipoUsuario, % Obtém o tipo de usuário.
-    ( TipoUsuario = estudante ->
-        (usuario{tipo: estudante, nome: Nome, matricula: Matricula} = Usuario ->
-            (monitor_estudante(E) ->
-                Extra = '[MONITOR] '
-            ;
-                Extra = ''
-            )
-        )
-    ;
-        Extra = '[PROFESSOR] '
+    clearScreen,
+
+    TipoUsuario = Usuario.tipo,
+    (TipoUsuario = professor ->
+        Extra = "[PROFESSOR] "
+    ; (TipoUsuario = monitor -> 
+        Extra = "[MONITOR] "
+        ; Extra = ""
+    )
     ),
-    atom_concat(Extra, Nome, Mensagem),
-    format('Bem-vindo ao sistema, ~s~n~n', [Mensagem]),
+    printCor("Bem-vindo ao sistema, &l~w&r~w\n\n", [Extra, Usuario.nome]),
 
     % Obtém a prioridade do usuário
     prioridadeUsuario(Usuario, Prioridade),
     format('Sua prioridade é: ~d~n', [Prioridade]),
 
     % Exibe opções baseadas no tipo de usuário
-    ( TipoUsuario = estudante ->
+    (TipoUsuario \= professor ->
         print_menu_escolhas([
-            ('Ver Reservas de Sala', menu_ver_sala),
-            ('Reservar Sala', reservar_sala(Usuario)),
-            ('Cancelar Reserva', cancelar_reserva(Usuario)),
+            ('Ver Reservas de Sala', logado:menu_ver_sala),
+            ('Reservar Sala', logado:reservar_sala(Usuario)),
+            ('Cancelar Reserva', logado:cancelar_reserva(Usuario)),
             ('Sair', halt)
         ])
     ;
         print_menu_escolhas([
-            ('Ver Reservas de Sala', menu_ver_sala),
-            ('Reservar Sala', reservar_sala(Usuario)),
-            ('Cancelar Reserva', cancelar_reserva(Usuario)),
-            ('Tornar Estudante Monitor', menu_monitor),
+            ('Ver Reservas de Sala', logado:menu_ver_sala),
+            ('Reservar Sala', logado:reservar_sala(Usuario)),
+            ('Cancelar Reserva', logado:cancelar_reserva(Usuario)),
+            ('Tornar Estudante Monitor', logado:menu_monitor),
             ('Sair', halt)
         ])
     ),
     menu_logado(Usuario). % Chama recursivamente para manter o menu ativo.
 
 menu_ver_sala :-
-    clear_screen,
-    write('Salas disponíveis:'), nl,
+    clearScreen,
+
+    write('Salas disponíveis:\n'),
     listar_salas(Salas),
     write('Digite o número da sala: '),
     read(NumeroSala),
@@ -116,31 +108,10 @@ igualReserva(HorarioInicio, HorarioFim, Reserva) :-
     Reserva.inicio == HorarioInicio,
     Reserva.fim == HorarioFim.
 
-% Função para limpar a tela 
-clear_screen :- 
-    write('\e[H\e[2J').
-
-% Exibe o menu de escolhas e executa a opção escolhida.
-print_menu_escolhas(Escolhas) :-
-    imprimir_opcoes(Escolhas, 1),
-    write('Escolha uma opção: '),
-    read(Opcao),
-    nth1(Opcao, Escolhas, Escolha),
-    call(Escolha).
-
-% Imprime as opções do menu.
-imprimir_opcoes([], _).
-imprimir_opcoes([Opcao|Resto], N) :-
-    write(N), write('. '), write(Opcao), nl,
-    N1 is N + 1,
-    imprimir_opcoes(Resto, N1).
-
 obter_hora_atual(Hora) :-
     get_time(Timestamp),
     stamp_date_time(Timestamp, DataHora, 'local'),
     Hora = DataHora.
-
-cores(laranja, "\e[38;5;214m").
 
 obter_sala(Numero, Sala) :-
     sala(Sala),
@@ -170,11 +141,6 @@ periodo(3, Inicio, Fim) :-
     data_atual(Data),
     inicio_mes(Data, Inicio),
     fim_mes(Data, Fim).
-
-aguarde_enter :-
-    write('\nPressione enter para continuar...'), nl,
-    get_single_char(_),
-    nl.
 
 % Verifica se duas datas são no mesmo dia.
 mesmo_dia(Inicio, Termino, true) :-

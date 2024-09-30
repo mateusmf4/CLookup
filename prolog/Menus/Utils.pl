@@ -1,4 +1,4 @@
-:- module(utils, [readStr/1, readNumber/1, printCor/1, printCor/2, clearScreen/0]).
+:- module(utils, [readStr/1, readNumber/1, printCor/1, printCor/2, clearScreen/0, aguarde_enter/0, print_menu_escolhas/1]).
 
 readStr(R) :- read_line_to_string(user_input, R).
 readNumber(R) :- readStr(S), number_string(R, S).
@@ -45,3 +45,24 @@ clearScreen :-
     (current_prolog_flag(windows, true) ->
         process_create(path(cmd), ['/c', 'cls'], []);
         shell('clear')).
+
+aguarde_enter :-
+    printCor('\n&aPressione enter para continuar...&r\n'),
+    get_single_char(_),
+    nl.
+
+% Exibe o menu de escolhas e executa a opção escolhida.
+% Escolhas é uma lista de tuplas, do tipo ("Descricao", predicado).
+print_menu_escolhas(Escolhas) :-
+    imprimir_opcoes(Escolhas, 1),
+    write('Escolha uma opção: '),
+    readNumber(Index),
+    nth1(Index, Escolhas, (_, Predicado)),
+    call(Predicado).
+
+% Imprime as opções do menu.
+imprimir_opcoes([], _).
+imprimir_opcoes([(Opcao, _)|Resto], N) :-
+    write(N), write('. '), write(Opcao), nl,
+    N1 is N + 1,
+    imprimir_opcoes(Resto, N1).
