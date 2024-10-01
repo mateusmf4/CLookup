@@ -4,13 +4,13 @@
 :- use_module('./Models/Usuario.pl').
 
 cadastro:-
-    writeln("╔══════════════════════════════════════════════════════════╗"),
-    writeln("║         ____          _           _                      ║"),
-    writeln("║        / ___|__ _  __| | __ _ ___| |_ _ __ ___           ║"),
-    writeln("║       | |   / _` |/ _` |/ _` / __| __| '__/ _ |          ║"),
-    writeln("║       | |__| (_| | (_| | (_| |__ | |_| | | (_) |         ║"),
-    writeln("║        |____|__,_||__,_||__,_|___/|__|_|  |___/          ║"),
-    writeln("╚══════════════════════════════════════════════════════════╝").
+    printCor("&l╔══════════════════════════════════════════════════════════╗\n"),
+    printCor("║         ____          _           _                      ║\n"),
+    printCor("║        / ___|__ _  __| | __ _ ___| |_ _ __ ___           ║\n"),
+    printCor("║       | |   / _` |/ _` |/ _` / __| __| '__/ _ |          ║\n"),
+    printCor("║       | |__| (_| | (_| | (_| |__ | |_| | | (_) |         ║\n"),
+    printCor("║        |____|__,_||__,_||__,_|___/|__|_|  |___/          ║\n"),
+    printCor("╚══════════════════════════════════════════════════════════╝&r\n").
 
 menuCadastro:- 
     clearScreen,
@@ -30,7 +30,8 @@ cadastroEstudante:-
         writeln("Usuário com mesma matricula já existe!");
         newUsuario(M, N, estudante, User),
         saveUsuario(User),
-        writeln("Cadastro realizado com sucesso!")
+        writeln("Cadastro realizado com sucesso!"),
+        aguarde_enter
     )),
     menuInicio.
 
@@ -43,6 +44,7 @@ cadastroProfessor:-
         writeln("Usuário com mesma matricula já existe!");
         newUsuario(M, N, professor, User),
         saveUsuario(User),
-        writeln("Cadastro realizado com sucesso!")
+        writeln("Cadastro realizado com sucesso!"),
+        aguarde_enter
     )),
     menuInicio.
