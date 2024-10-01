@@ -55,10 +55,16 @@ aguarde_enter :-
 % Escolhas é uma lista de tuplas, do tipo ("Descricao", predicado).
 print_menu_escolhas(Escolhas) :-
     imprimir_opcoes(Escolhas, 1),
-    write('Escolha uma opção: '),
-    readNumber(Index),
+    length(Escolhas, MaxIndex),
+    ler_numero_escolhas(MaxIndex, Index),
     nth1(Index, Escolhas, (_, Predicado)),
     call(Predicado).
+
+% Garante que o número lido é uma opção válida
+ler_numero_escolhas(MaxIndex, R) :-
+    write('Escolha uma opção: '),
+    (readNumber(Num), Num > 0, Num =< MaxIndex, R = Num, !)
+    ; writeln('Opção inválida!'), ler_numero_escolhas(MaxIndex, R).
 
 % Imprime as opções do menu.
 imprimir_opcoes([], _).

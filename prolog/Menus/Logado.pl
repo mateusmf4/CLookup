@@ -12,13 +12,15 @@
 :- use_module(library(readutil)).
 
 bem_vindo :- 
+    printCor("&l"),
     writeln("╔═══════════════════════════════════════════════════════════╗"), 
     writeln("║    ____                  __     ___           _           ║"),
     writeln("║   | __ )  ___ _ __ ___   | |   / (_)_ __   __| | ___      ║"),
     writeln("║   |  _ | / _ | '_ ` _ |   | | / /| | '_  |/  _`|/ _ |     ║"),
     writeln("║   | |_) |  __/ | | | | |   | V / | | | | ||(_| ||(_)|     ║"),
     writeln("║   |____/ |___|_| |_| |_|    |_/  |_|_| |_||__,_||___/     ║"),
-    writeln("╚═══════════════════════════════════════════════════════════╝").
+    writeln("╚═══════════════════════════════════════════════════════════╝"),
+    printCor("&r").
 
 texto_sala :-
     writeln("╔═══════════════════════════════════════════════════════════╗"), 
@@ -34,13 +36,12 @@ texto_sala :-
 menu_logado(Usuario) :-
     clearScreen,
 
+    bem_vindo, nl,
+
     TipoUsuario = Usuario.tipo,
-    (TipoUsuario = professor ->
-        Extra = "[PROFESSOR] "
-    ; (TipoUsuario = monitor -> 
-        Extra = "[MONITOR] "
-        ; Extra = ""
-    )
+    ( TipoUsuario = professor -> Extra = "[PROFESSOR] "
+    ; TipoUsuario = monitor -> Extra = "[MONITOR] "
+    ; Extra = ""
     ),
     printCor("Bem-vindo ao sistema, &l~w&r~w\n\n", [Extra, Usuario.nome]),
 
