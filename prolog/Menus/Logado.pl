@@ -7,6 +7,8 @@
 :- use_module('Models/Sala.pl').
 :- use_module('Models/Usuario.pl').
 
+:- use_module('Controllers/UsuarioController.pl').
+
 :- use_module('Repository.pl').
 :- use_module(library(date)).
 :- use_module(library(readutil)).
@@ -196,3 +198,11 @@ fim_mes(Data, FimMes) :-
     date_time_value(year, Data, Ano),
     ultimo_dia_mes(Ano, Mes, UltimoDia),
     FimMes = date(Ano, Mes, UltimoDia).
+
+menu_monitor :-
+    clearScreen,
+    writeln("Estudantes cadastrados:"), printCor("&cMatr. Nome&r\n"),
+    listar_estudantes,
+    writeln("Informe a matricula do aluno: "),
+    readNumber(M),
+    (atualiza_monitor(M) -> writeln("Monitor adicionado!\n"); writeln("Estudante não está cadastrado\n")).

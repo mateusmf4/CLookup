@@ -1,4 +1,4 @@
-:- module(repository, [fetchUsuario/2, fetchAllUsuarios/2, saveUsuario/1, fetchSala/2, fetchAllSalas/1, saveSala/1]).
+:- module(repository, [fetchUsuario/2, fetchAllUsuarios/2, saveUsuario/1, fetchSala/2, fetchAllSalas/1, saveSala/1, usuarioEhTipo/2]).
 
 :- use_module(library(http/json)).
 :- use_module(library(filesex)).
