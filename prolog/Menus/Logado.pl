@@ -14,7 +14,7 @@
 :- use_module(library(readutil)).
 
 bem_vindo :- 
-    printCor("&l"),
+    print_cor("&l"),
     writeln("╔═══════════════════════════════════════════════════════════╗"), 
     writeln("║    ____                  __     ___           _           ║"),
     writeln("║   | __ )  ___ _ __ ___   | |   / (_)_ __   __| | ___      ║"),
@@ -22,7 +22,7 @@ bem_vindo :-
     writeln("║   | |_) |  __/ | | | | |   | V / | | | | ||(_| ||(_)|     ║"),
     writeln("║   |____/ |___|_| |_| |_|    |_/  |_|_| |_||__,_||___/     ║"),
     writeln("╚═══════════════════════════════════════════════════════════╝"),
-    printCor("&r").
+    print_cor("&r").
 
 texto_sala :-
     writeln("╔═══════════════════════════════════════════════════════════╗"), 
@@ -36,7 +36,7 @@ texto_sala :-
 
 % Apresenta o menu principal de um usuario logado, recebendo o usuario que está logado no sistema.
 menu_logado(Usuario) :-
-    clearScreen,
+    clear_screen,
 
     bem_vindo, nl,
 
@@ -45,7 +45,7 @@ menu_logado(Usuario) :-
     ; TipoUsuario = monitor -> Extra = "[MONITOR] "
     ; Extra = ""
     ),
-    printCor("Bem-vindo ao sistema, &l~w&r~w\n\n", [Extra, Usuario.nome]),
+    print_cor("Bem-vindo ao sistema, &l~w&r~w\n\n", [Extra, Usuario.nome]),
 
     % Obtém a prioridade do usuário
     prioridadeUsuario(Usuario, Prioridade),
@@ -71,7 +71,7 @@ menu_logado(Usuario) :-
     menu_logado(Usuario). % Chama recursivamente para manter o menu ativo.
 
 menu_ver_sala :-
-    clearScreen,
+    clear_screen,
 
     write('Salas disponíveis:\n'),
     listar_salas(Salas),
@@ -90,7 +90,7 @@ menu_ver_sala :-
 % Remove uma reserva da sala pelo número da sala, horário de início e término.
 cancelarReservaSala(NumSala, HorarioInicio, HorarioFim) :-
     % Carrega a sala correspondente
-    fetchSala(NumSala, Sala),
+    fetch_sala(NumSala, Sala),
     
     % Verifica se a sala foi encontrada
     ( Sala == false ->
@@ -103,7 +103,7 @@ cancelarReservaSala(NumSala, HorarioInicio, HorarioFim) :-
         NovaSala = Sala.put(reservas, NovasReservas),
         
         % Salva a sala atualizada no banco de dados
-        saveSala(NovaSala)
+        save_sala(NovaSala)
     ).
 
 % Predicado auxiliar para comparar as reservas com base no horário de início e fim.
@@ -200,9 +200,9 @@ fim_mes(Data, FimMes) :-
     FimMes = date(Ano, Mes, UltimoDia).
 
 menu_monitor :-
-    clearScreen,
-    writeln("Estudantes cadastrados:"), printCor("&cMatr. Nome&r\n"),
+    clear_screen,
+    writeln("Estudantes cadastrados:"), print_cor("&cMatr. Nome&r\n"),
     listar_estudantes,
     writeln("Informe a matricula do aluno: "),
-    readNumber(M),
+    read_number(M),
     (atualiza_monitor(M) -> writeln("Monitor adicionado!\n"); writeln("Estudante não está cadastrado\n")).

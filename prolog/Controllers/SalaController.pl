@@ -1,6 +1,6 @@
 :- use_module(library(date)), use_module(models([usuario, sala, reserva])).
 :- module(sala_controller, [listar_salas/1]).
-:- module(repository, [fetchSala/1, fetchAllSalas/1]).
+:- module(repository, [fetch_sala/1, fetch_all_salas/1]).
 
 
 reserva_conflitantes(Reserva, Reservas, Conflitantes) :-
@@ -11,11 +11,11 @@ se_reserva_conflita(Reserva1(_, _, Inicio1, Termino1), Reserva2(_, _, Inicio2, T
 
 % Lista todas as salas cadastradas.
 listar_salas(Salas) :-
-    fetchAllSalas(Salas).
+    fetch_all_salas(Salas).
 
 % Retorna uma sala baseado no número de sala.
 get_sala(NumeroSala, Resultado) :-
-    repository:fetchSala(NumeroSala, MaybeSala),
+    repository:fetch_sala(NumeroSala, MaybeSala),
     (MaybeSala = false -> 
         Resultado = erro('Sala não encontrada.');
         Resultado = sucesso(MaybeSala)).

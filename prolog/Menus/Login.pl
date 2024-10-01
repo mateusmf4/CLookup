@@ -6,18 +6,18 @@
 :- use_module('Repository.pl').
 
 login :- 
-    printCor("&l╔══════════════════════════════════════════════════════════╗\n"), 
-    printCor("║                _                _                        ║\n"),
-    printCor("║               | |    ___   __ _(_)_ __                   ║\n"),
-    printCor("║               | |   / _ | / _` | | '_ |                  ║\n"),
-    printCor("║               | |__| (_) | (_| | | | | |                 ║\n"),
-    printCor("║               |_____║___/ ║__, |_|_| |_|                 ║\n"),
-    printCor("║                           |___/                          ║\n"),
-    printCor("╚══════════════════════════════════════════════════════════╝&r\n").
+    print_cor("&l╔══════════════════════════════════════════════════════════╗\n"), 
+    print_cor("║                _                _                        ║\n"),
+    print_cor("║               | |    ___   __ _(_)_ __                   ║\n"),
+    print_cor("║               | |   / _ | / _` | | '_ |                  ║\n"),
+    print_cor("║               | |__| (_) | (_| | | | | |                 ║\n"),
+    print_cor("║               |_____║___/ ║__, |_|_| |_|                 ║\n"),
+    print_cor("║                           |___/                          ║\n"),
+    print_cor("╚══════════════════════════════════════════════════════════╝&r\n").
 
 menuLogin :-
-    clearScreen,
+    clear_screen,
     login,
     writeln("Digite sua matrícula: "),
-    readNumber(M),
-    (fetchUsuario(M, U) -> menu_logado(U); writeln("Não existe usuário com essa matrícula!"), aguarde_enter).
+    read_number(M),
+    (fetch_usuario(M, U) -> menu_logado(U); writeln("Não existe usuário com essa matrícula!"), aguarde_enter).

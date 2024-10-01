@@ -3,16 +3,16 @@
 :- use_module('Repository.pl').
 
 atualiza_monitor(Matricula) :-
-    fetchUsuario(Matricula, User),
+    fetch_usuario(Matricula, User),
     print(User),
     User.put(tipo, monitor),
     print(User).
 
 listar_estudantes :-
-    fetchAllUsuarios(estudante, R),
+    fetch_all_estudantes(R),
     \+ listar(R).
 
 listar([X|Y]) :-
     write(X.matricula), write(". "), write(X.nome),
-    (usuarioEhTipo(monitor, X) -> writeln("- Monitor"); writeln("")),
+    (X.tipo = monitor -> writeln("- Monitor"); writeln("")),
     listar(Y).

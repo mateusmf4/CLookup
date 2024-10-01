@@ -5,28 +5,28 @@
 :- use_module('Menus/Cadastro.pl', [menuCadastro/0]).
 
 printBanner :- 
-    printCor("&l╔═══════════════════════════════════════════════════════════════════════════════╗\n"),
-    printCor("║                                                                               ║\n"),
-    printCor("║                 ______  __                 __               _______           ║\n"),
-    printCor("║               .' ___  |[  |               [  |  _          |_   __ |          ║\n"),
-    printCor("║             / .'   |_| | |  .--.    .--.  | | / ] __   _    | |__) |          ║\n"),
-    printCor("║             | |        | |/ .'`| |/ .'`| || '' < [  | | |   |  ___/           ║\n"),
-    printCor("║             | `.___.'| | || |__. || |__. || |`| | | |_/ |, _| |_              ║\n"),
-    printCor("║              `.____ .'[___]'.__.'  '.__.'[__|  |_]'.__.'_/|_____|             ║\n"),
-    printCor("║                                                                               ║\n"),
-    printCor("║       Menu:                                                                   ║\n"),
-    printCor("║          &r&b1. Login    &r&l                                                         ║\n"),
-    printCor("║          &r&b2. Cadastro &r&l                                                         ║\n"),
-    printCor("║          &r&b3. Sair     &r&l                                                         ║\n"),
-    printCor("║                                                                               ║\n"),
-    printCor("║                                                                               ║\n"),
-    printCor("║       Digite a opção:                                                         ║\n"),
-    printCor("╚═══════════════════════════════════════════════════════════════════════════════╝&r\n").
+    print_cor("&l╔═══════════════════════════════════════════════════════════════════════════════╗\n"),
+    print_cor("║                                                                               ║\n"),
+    print_cor("║                 ______  __                 __               _______           ║\n"),
+    print_cor("║               .' ___  |[  |               [  |  _          |_   __ |          ║\n"),
+    print_cor("║             / .'   |_| | |  .--.    .--.  | | / ] __   _    | |__) |          ║\n"),
+    print_cor("║             | |        | |/ .'`| |/ .'`| || '' < [  | | |   |  ___/           ║\n"),
+    print_cor("║             | `.___.'| | || |__. || |__. || |`| | | |_/ |, _| |_              ║\n"),
+    print_cor("║              `.____ .'[___]'.__.'  '.__.'[__|  |_]'.__.'_/|_____|             ║\n"),
+    print_cor("║                                                                               ║\n"),
+    print_cor("║       Menu:                                                                   ║\n"),
+    print_cor("║          &r&b1. Login    &r&l                                                         ║\n"),
+    print_cor("║          &r&b2. Cadastro &r&l                                                         ║\n"),
+    print_cor("║          &r&b3. Sair     &r&l                                                         ║\n"),
+    print_cor("║                                                                               ║\n"),
+    print_cor("║                                                                               ║\n"),
+    print_cor("║       Digite a opção:                                                         ║\n"),
+    print_cor("╚═══════════════════════════════════════════════════════════════════════════════╝&r\n").
 
 menuInicio :- 
-    clearScreen,
+    clear_screen,
     printBanner,
-    readNumber(I), 
+    read_number(I), 
     (I == 1 -> menuLogin; I == 2 -> menuCadastro; I == 3 -> sair; writeln("Erro: Opção invalida!")),
     menuInicio.
 

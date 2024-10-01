@@ -1,55 +1,55 @@
-:- module(utils, [readStr/1, readNumber/1, printCor/1, printCor/2, clearScreen/0, aguarde_enter/0, print_menu_escolhas/1]).
+:- module(utils, [read_str/1, read_number/1, print_cor/1, print_cor/2, clear_screen/0, aguarde_enter/0, print_menu_escolhas/1]).
 
-readStr(R) :- read_line_to_string(user_input, R).
-readNumber(R) :- readStr(S), number_string(R, S).
+read_str(R) :- read_line_to_string(user_input, R).
+read_number(R) :- read_str(S), number_string(R, S).
 
 % Faz um print da string passada pela função colorir,
 % aplicando as tags de cor.
 % Hello &vWorld&r ira imprimir world em cor verde.
-printCor(String) :-
+print_cor(String) :-
     colorir(String, R),
     write(R).
 
 % Mesmo do acima, mas permite formatação via format/2.
-printCor(FormatString, Args) :-
+print_cor(FormatString, Args) :-
     colorir(FormatString, S),
     format(S, Args).
 
 % resetar
-codigoCor(r, "\e[0m").
+codigo_cor(r, "\e[0m").
 % negrito (bold)
-codigoCor(b, "\e[1m").
+codigo_cor(b, "\e[1m").
 % laranja
-codigoCor(l, "\e[1;33m").
+codigo_cor(l, "\e[1;33m").
 % verde
-codigoCor(v, "\e[32m").
+codigo_cor(v, "\e[32m").
 % azul
-codigoCor(a, "\e[36m").
+codigo_cor(a, "\e[36m").
 % ciano
-codigoCor(c, "\e[0;36m").
+codigo_cor(c, "\e[0;36m").
 
 colorir(String, R) :-
     string_chars(String, Chars),
-    colorirChars(Chars, CharsCor),
+    colorir_chars(Chars, CharsCor),
     string_chars(R, CharsCor).
 
-colorirChars(['&', X | T], R) :-
-    codigoCor(X, Codigo),
+colorir_chars(['&', X | T], R) :-
+    codigo_cor(X, Codigo),
     string_chars(Codigo, Chars),
-    colorirChars(T, T1),
+    colorir_chars(T, T1),
     append(Chars, T1, R),
     !.
-colorirChars([H | T], [H | T1]) :- colorirChars(T, T1).
-colorirChars([], []).
+colorir_chars([H | T], [H | T1]) :- colorir_chars(T, T1).
+colorir_chars([], []).
 
 % Limpa a tela do terminal
-clearScreen :-
+clear_screen :-
     (current_prolog_flag(windows, true) ->
         process_create(path(cmd), ['/c', 'cls'], []);
         shell('clear')).
 
 aguarde_enter :-
-    printCor('\n&aPressione enter para continuar...&r\n'),
+    print_cor('\n&aPressione enter para continuar...&r\n'),
     get_single_char(_),
     nl.
 
@@ -65,7 +65,7 @@ print_menu_escolhas(Escolhas) :-
 % Garante que o número lido é uma opção válida
 ler_numero_escolhas(MaxIndex, R) :-
     write('Escolha uma opção: '),
-    (readNumber(Num), Num > 0, Num =< MaxIndex, R = Num, !)
+    (read_number(Num), Num > 0, Num =< MaxIndex, R = Num, !)
     ; writeln('Opção inválida!'), ler_numero_escolhas(MaxIndex, R).
 
 % Imprime as opções do menu.
