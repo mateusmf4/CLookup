@@ -1,4 +1,4 @@
-:- module(repository, [fetch_usuario/2, fetch_all_usuarios/2, save_usuario/1, fetch_sala/2, fetch_all_salas/1, save_sala/1]).
+:- module(repository, [fetch_usuario/2, fetch_all_usuarios/2, fetch_all_usuarios/1, fetch_all_alunos/1, save_usuario/1, fetch_sala/2, fetch_all_salas/1, save_sala/1]).
 
 :- use_module(library(http/json)).
 :- use_module(library(filesex)).
@@ -47,7 +47,7 @@ fetch_usuario(Matricula, Usuario) :-
     converte_usuario(Dados.usuarios.get(Key), Usuario).
 
 % Predicado que verifica se usuario é de um tipo, usado em fetch_all_usuarios
-usuarioEhTipo(Tipo, Usuario) :-
+usuario_eh_tipo(Tipo, Usuario) :-
     Usuario.tipo == Tipo.
 
 % Retorna a lista de usuarios de tal tipo.
@@ -55,7 +55,24 @@ fetch_all_usuarios(Tipo, R) :-
     load_database(Dados),
     atom_string(Tipo, TipoString),
     dict_pairs(Dados.usuarios, _, Pairs), pairs_values(Pairs, Usuarios),
-    include(usuarioEhTipo(TipoString), Usuarios, Filtrado),
+    include(usuario_eh_tipo(TipoString), Usuarios, Filtrado),
+    maplist(converte_usuario, Filtrado, R).
+
+% Retorna a lista de todos os usuarios.
+fetch_all_usuarios(R) :-
+    load_database(Dados),
+    dict_pairs(Dados.usuarios, _, Pairs), pairs_values(Pairs, Usuarios),
+    maplist(converte_usuario, Usuarios, R).
+
+% Predicado auxiliar.
+usuario_nao_eh_professor(Usuario) :-
+    Usuario.tipo \= "professor".
+
+% Retorna a lista de usuarios que não são professores.
+fetch_all_alunos(R) :-
+    load_database(Dados),
+    dict_pairs(Dados.usuarios, _, Pairs), pairs_values(Pairs, Usuarios),
+    include(usuario_nao_eh_professor, Usuarios, Filtrado),
     maplist(converte_usuario, Filtrado, R).
 
 % Adiciona um novo estudante no sistema, ou sobrescreve um existente dado que ambos tenham a mesma matricula.

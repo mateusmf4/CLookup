@@ -9,7 +9,7 @@ atualiza_monitor(Matricula) :-
     print(User).
 
 listar_estudantes :-
-    fetch_all_estudantes(R),
+    fetch_all_alunos(R),
     \+ listar(R).
 
 listar([X|Y]) :-
