@@ -200,7 +200,7 @@ fim_mes(Data, FimMes) :-
 
 menu_monitor :-
     clearScreen,
-    writeln("Estudantes cadastrados:"), writeln("Matr. Nome"),
+    writeln("Estudantes cadastrados:"), printCor("&cMatr. Nome&r\n"),
     listar_estudantes,
     writeln("Informe a matricula do aluno: "),
     readNumber(M),

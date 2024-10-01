@@ -25,6 +25,8 @@ codigoCor(l, "\e[1;33m").
 codigoCor(v, "\e[32m").
 % azul
 codigoCor(a, "\e[36m").
+% ciano
+codigoCor(c, "\e[0;36m").
 
 colorir(String, R) :-
     string_chars(String, Chars),
