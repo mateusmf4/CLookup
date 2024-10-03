@@ -1,4 +1,4 @@
-:- module(utils, [read_str/1, read_number/1, print_cor/1, print_cor/2, clear_screen/0, aguarde_enter/0, print_menu_escolhas/1]).
+:- module(utils, [read_str/1, read_number/1, print_cor/1, print_cor/2, clear_screen/0, aguarde_enter/0, print_menu_escolhas/1, ler_numero_escolhas/3]).
 
 read_str(R) :- read_line_to_string(user_input, R).
 read_number(R) :- read_str(S), number_string(R, S).
@@ -57,16 +57,17 @@ aguarde_enter :-
 % Escolhas é uma lista de tuplas, do tipo ("Descricao", predicado).
 print_menu_escolhas(Escolhas) :-
     imprimir_opcoes(Escolhas, 1),
+    nl,
     length(Escolhas, MaxIndex),
-    ler_numero_escolhas(MaxIndex, Index),
+    ler_numero_escolhas('Escolha uma opção: ', MaxIndex, Index),
     nth1(Index, Escolhas, (_, Predicado)),
     call(Predicado).
 
-% Garante que o número lido é uma opção válida
-ler_numero_escolhas(MaxIndex, R) :-
-    write('Escolha uma opção: '),
-    (read_number(Num), Num > 0, Num =< MaxIndex, R = Num, !)
-    ; writeln('Opção inválida!'), ler_numero_escolhas(MaxIndex, R).
+% Garante que o número lido é uma opção válida, ou seja, entre 1 e MaxIndex
+ler_numero_escolhas(Prompt, MaxIndex, R) :-
+    write(Prompt),
+    (read_number(R), between(1, MaxIndex, R), !)
+    ; (writeln('Opção inválida!'), ler_numero_escolhas(Prompt, MaxIndex, R)).
 
 % Imprime as opções do menu.
 imprimir_opcoes([], _).
