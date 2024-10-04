@@ -3,25 +3,25 @@
 :- module(repository, [fetchUsuario/1, fetchAllUsuarios/1]).
 
 cadastraUsuario(Matricula, Nome, TipoUsuario, R) :- 
-    repository:fetchUsuario(Matricula, usuarioCadastrado),
+    repository:fetch_usuario(Matricula, usuarioCadastrado),
     (usuarioCadastrado = false -> 
-        saveUsuario(usuario(Matricula, Nome, TipoUsuario)),
+        save_usuario(usuario(Matricula, Nome, TipoUsuario)),
         R = sucesso('Usuário cadastrado com sucesso');
         R = erro('Usuário com mesma matricula já existe!')).
        
 atualizaMonitor(Matricula, R) :-
-    repository:fetchUsuario(Matricula, UsuarioCadastrado) -> (
+    repository:fetch_usuario(Matricula, UsuarioCadastrado) -> (
         UsuarioCadastrado.tipo = 'monitor', 
             monitorAtualizado = UsuarioCadastrado.(_{tipo:'estudante'}),
-            saveUsuario(monitorAtualizado),
+            save_usuario(monitorAtualizado),
             R = sucesso('Usuário atualizado com sucesso');
         UsuarioCadastrado.tipo = 'estudante', 
             estudanteAtualizado = UsuarioCadastrado.(_{tipo:'monitor'}),
-            saveUsuario(estudanteAtualizado),
+            save_usuario(estudanteAtualizado),
             R = sucesso('Usuário atualizado com sucesso');
         R = erro('Usuário não é estudante ou monitor!').
     );
         R = erro('Usuário não cadastrado!').
         
 listar_usuarios(Usuarios) :-
-    fetchAllUsuarios(Usuarios).
+    fetch_all_usuarios(Usuarios).
