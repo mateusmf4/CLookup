@@ -1,6 +1,7 @@
 :- module(login, [menuLogin/0]).
-
+:- use_module('Menus/Logado.pl', [menuLogado/0]).
 :- use_module('Menus/Utils.pl').
+:- use_module('Repository.pl').
 
 login :- 
     writeln("╔══════════════════════════════════════════════════════════╗"), 
@@ -17,4 +18,4 @@ menuLogin :-
     login,
     writeln("Digite sua matrícula: "),
     readStr(M),
-    writeln(M).
+    (fetchUsuario(M, U) -> menuLogado(U);  erro("Não existe usuário com essa matrícula!")).
