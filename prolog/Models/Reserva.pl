@@ -7,6 +7,6 @@ parse_date_time(String, DateTime) :-
 newReserva(Matricula, Inicio, Termino, R) :-
     parse_date_time(Inicio, InicioDateTime),
     parse_date_time(Termino, TerminoDateTime),
-    date_time_stamp(InicioDateTime, 'UTC', InicioStamp),
-    date_time_stamp(TerminoDateTime, 'UTC', TerminoStamp),
-    R = reserva{Matricula, InicioStamp, TerminoStamp}.
+    stamp_date_time(InicioDateTime, 'UTC', InicioStamp),
+    stamp_date_time(TerminoDateTime, 'UTC', TerminoStamp),
+    R = reserva(Matricula, InicioStamp, TerminoStamp).
