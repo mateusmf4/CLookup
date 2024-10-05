@@ -1,6 +1,6 @@
-:- use_module(models(usuario)).
-:- module(usuario_controller, [listar_usuarios/1]).
-:- module(repository, [fetchUsuario/1, fetchAllUsuarios/1]).
+:- module(usuario_controller, []).
+:- use_module('Controllers/UsuarioController.pl').
+:- use_module('Repository.pl').
 
 cadastraUsuario(Matricula, Nome, TipoUsuario, R) :- 
     repository:fetch_usuario(Matricula, usuarioCadastrado),
@@ -19,7 +19,7 @@ atualizaMonitor(Matricula, R) :-
             estudanteAtualizado = UsuarioCadastrado.(_{tipo:'monitor'}),
             save_usuario(estudanteAtualizado),
             R = sucesso('Usuário atualizado com sucesso');
-        R = erro('Usuário não é estudante ou monitor!').
+        R = erro('Usuário não é estudante ou monitor!')
     );
         R = erro('Usuário não cadastrado!').
         

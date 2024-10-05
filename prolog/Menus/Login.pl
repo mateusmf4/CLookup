@@ -1,5 +1,5 @@
 :- module(login, [menuLogin/0]).
-:- use_module('Menus/Logado.pl', [menuLogado/0]).
+:- use_module('Menus/Logado.pl', [menu_logado/1]).
 :- use_module('Menus/Utils.pl').
 :- use_module('Menus/Logado.pl').
 
@@ -20,4 +20,4 @@ menuLogin :-
     login,
     writeln("Digite sua matrícula: "),
     readStr(M),
-    (fetch_usuario(M, U) -> menuLogado(U);  erro("Não existe usuário com essa matrícula!"), aguarde_enter).
+    (fetch_usuario(M, U) -> menu_logado(U);  erro("Não existe usuário com essa matrícula!"), aguarde_enter).
