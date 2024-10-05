@@ -3,8 +3,7 @@
 :- use_module('Repository.pl').
 
 cadastraUsuario(Matricula, Nome, TipoUsuario, R) :- 
-    repository:fetch_usuario(Matricula, usuarioCadastrado),
-    (usuarioCadastrado = false -> 
+    (repository:fetch_usuario(Matricula, UsuarioCadastrado) ->
         save_usuario(usuario(Matricula, Nome, TipoUsuario)),
         R = sucesso('Usuário cadastrado com sucesso');
         R = erro('Usuário com mesma matricula já existe!')).
