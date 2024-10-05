@@ -1,11 +1,8 @@
 :- module(login, [menuLogin/0]).
 :- use_module('Menus/Logado.pl', [menuLogado/0]).
 :- use_module('Menus/Utils.pl').
-<<<<<<< HEAD
-=======
 :- use_module('Menus/Logado.pl').
 
->>>>>>> a3c736837e066cc627cfed3556bfcd3b9503ba34
 :- use_module('Repository.pl').
 
 login :- 
