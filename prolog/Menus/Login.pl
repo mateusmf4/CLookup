@@ -19,5 +19,5 @@ menuLogin :-
     clear_screen,
     login,
     writeln("Digite sua matrícula: "),
-    readStr(M),
+    read_number(M),
     (fetch_usuario(M, U) -> menu_logado(U);  erro("Não existe usuário com essa matrícula!"), aguarde_enter).

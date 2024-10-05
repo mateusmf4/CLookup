@@ -1,5 +1,7 @@
 :- module(cadastro, [menuCadastro/0]).
 :- use_module('Menus/Utils.pl').
+:- use_module('Menus/Logado.pl', [menu_logado/1]).
+:- use_module('Menus/Inicio.pl', [menuInicio/0]).
 :- use_module('./Repository.pl').
 :- use_module('./Models/Usuario.pl').
 
@@ -18,33 +20,17 @@ menuCadastro:-
     writeln("Cadastrar como:\n"),
     writeln("1. Estudante"), writeln("2. Professor"), writeln("3. Voltar"),
     read_number(I),
-    (I == 1 -> cadastroEstudante; I == 2 -> cadastroProfessor; I == 3 -> menuInicio; writeln("Erro: Opção inválida!")),
+    (I == 1 -> realizarCadastro(estudante); I == 2 -> realizarCadastro(professor); I == 3 -> menuInicio; writeln("Erro: Opção inválida!")),
     menuCadastro.
 
-cadastroEstudante:-
+realizarCadastro(Tipo) :-
     writeln("Nome: "), read_str(N),
     writeln("Matrícula: "), read_number(M),
-    atom_length(M, Length),
-    (Length =\= 9 -> writeln("Matrícula inválida!"); 
     (fetch_usuario(M, U) -> 
-        writeln("Usuário com mesma matricula já existe!");
-        newUsuario(M, N, estudante, User),
+        (writeln("Usuário com mesma matricula já existe!"), aguarde_enter, menuInicio);
+        newUsuario(M, N, Tipo, User),
         save_usuario(User),
         writeln("Cadastro realizado com sucesso!"),
-        aguarde_enter
-    )),
-    menuInicio.
-
-cadastroProfessor:-
-    writeln("Nome: "), read_str(N),
-    writeln("Matrícula: "), read_number(M),
-    atom_length(M, Length),
-    (Length =\= 9 -> writeln("Matrícula inválida!"); 
-    (fetch_usuario(M, U) -> 
-        writeln("Usuário com mesma matricula já existe!");
-        newUsuario(M, N, professor, User),
-        save_usuario(User),
-        writeln("Cadastro realizado com sucesso!"),
-        aguarde_enter
-    )),
-    menuInicio.
+        aguarde_enter,
+        menu_logado(User)
+    ).
