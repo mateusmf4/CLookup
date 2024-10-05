@@ -1,4 +1,4 @@
-:- module(sala_controller, [listar_salas/1, get_sala/2, findall/3, reserva_conflitantes/3, se_reserva_conflita/2, sala_reservas_em_faixa/4]).
+:- module(sala_controller, [listar_salas/1, get_sala/2, findall/3, reserva_conflitantes/3, se_reserva_conflita/2, sala_reservas_em_faixa/4, cancelar_reserva/3]).
 
 :- use_module(library(date)).
 :- use_module('Repository.pl').
@@ -29,4 +29,19 @@ compare(inicio, reserva(_, I1, _), reserva(_, I2, _), Order) :-
     (   I1 @< I2 -> Order = '<'
     ;   I1 == I2 -> Order = '='
     ;   Order = '>'
+    ).
+
+%
+cancelar_reserva(NumeroSala, ReservaParaCancelar, Resultado) :-
+    repository:fetch_all_salas(Dados),
+    atom_number(Key, NumeroSala),
+    (   Dados.get(salas/Key, Sala)
+    ->  (   member(ReservaParaCancelar, Sala.reservas)
+        ->  delete(Sala.reservas, ReservaParaCancelar, NovasReservas),
+            NewSala = sala{numSala: Sala.numSala, nomeSala: Sala.nomeSala, reservas: NovasReservas},
+            repository:save_sala(NewSala),
+            Resultado = right(NewSala)
+        ;   Resultado = left('Reserva não existente.')
+        )
+    ;   Resultado = left('Sala não encontrada.')
     ).
