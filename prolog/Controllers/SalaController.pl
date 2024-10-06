@@ -1,7 +1,8 @@
-:- module(sala_controller, [listar_salas/1, get_sala/2, findall/3, reserva_conflitantes/3, se_reserva_conflita/2, sala_reservas_em_faixa/4, cancelar_reserva/3]).
+:- module(sala_controller, [listar_salas/1, get_sala/2, reserva_conflitantes/3, se_reserva_conflita/2, sala_reservas_em_faixa/4, cancelar_reserva/3, reservar_sala/5]).
 
 :- use_module(library(date)).
 :- use_module('Repository.pl').
+:- use_module('./Models/Usuario.pl').
 
 %
 reserva_conflitantes(NovaReserva, Reservas, Conflitantes) :-
@@ -42,6 +43,25 @@ cancelar_reserva(NumeroSala, ReservaParaCancelar, Resultado) :-
             repository:save_sala(NewSala),
             Resultado = right(NewSala)
         ;   Resultado = left('Reserva não existente.')
+        )
+    ;   Resultado = left('Sala não encontrada.')
+    ).
+
+reservar_sala(NumeroSala, Usuario, Inicio, Termino, Resultado) :-
+    get_sala(NumeroSala, Sala),
+    (   Sala = sala(_, _, Reservas)
+    ->  NovaReserva = reserva(Usuario, Inicio, Termino),
+        reserva_conflitantes(NovaReserva, Reservas, Conflitantes),
+        findall(PriConflitante-ResConflitante, (member(ResConflitante, Conflitantes), fetch_usuario(ResConflitante.usuario, UserConflit), prioridadeUsuario(UserConflit, PriConflitante)), Conflitos),
+        fetch_usuario(Usuario, U),
+        prioridadeUsuario(U, MinhaPrioridade),
+        (   forall((PriConflitante-ResConflitante, Conflitos), MinhaPrioridade > PriConflitante)
+        ->  delete(Reservas, Conflitantes, ReservasAtualizadas),
+            append([NovaReserva], ReservasAtualizadas, NovasReservas),
+            NewSala = Sala{reservas: NovasReservas},
+            repository:save_sala(NewSala),
+            Resultado = right(NewSala)
+        ;   Resultado = left('Sala não disponível para reserva.')
         )
     ;   Resultado = left('Sala não encontrada.')
     ).
