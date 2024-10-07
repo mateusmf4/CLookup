@@ -2,6 +2,7 @@
 :- use_module('Models/Usuario.pl').
 :- use_module('Repository.pl').
 
+% cadastra um usuário 
 cadastra_usuario(Matricula, Nome, TipoUsuario, R) :- 
     (repository:fetch_usuario(Matricula, _) ->
         R = erro('Usuário com mesma matricula já existe!');
@@ -14,12 +15,13 @@ cadastra_usuario(Matricula, Nome, TipoUsuario, R) :-
 oposto(monitor, estudante).
 oposto(estudante, monitor).
 
+% transforma um estudante em monitor, ou retira o cargo de monitor de um estudante
 atualiza_monitor(Matricula) :-
     repository:fetch_usuario(Matricula, Usuario),
     member(Usuario.tipo, [monitor, estudante]),
     oposto(Usuario.tipo, NovoTipo),
     NovoUsuario = Usuario.put(_{tipo: NovoTipo}),
     repository:save_usuario(NovoUsuario).
-        
+
 listar_alunos(Usuarios) :-
     fetch_all_alunos(Usuarios).
