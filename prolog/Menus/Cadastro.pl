@@ -2,8 +2,8 @@
 :- use_module('Menus/Utils.pl').
 :- use_module('Menus/Logado.pl', [menu_logado/1]).
 :- use_module('Menus/Inicio.pl', [menuInicio/0]).
-:- use_module('./Repository.pl').
-:- use_module('./Models/Usuario.pl').
+:- use_module('Models/Usuario.pl').
+:- use_module('Controllers/UsuarioController.pl').
 
 cadastro:-
     print_cor("&l╔══════════════════════════════════════════════════════════╗\n"),
@@ -26,11 +26,10 @@ menuCadastro:-
 realizarCadastro(Tipo) :-
     writeln("Nome: "), read_str(N),
     writeln("Matrícula: "), read_number(M),
-    (fetch_usuario(M, _) -> 
-        (writeln("Usuário com mesma matricula já existe!"), aguarde_enter, menuInicio);
-        newUsuario(M, N, Tipo, User),
-        save_usuario(User),
-        writeln("Cadastro realizado com sucesso!"),
+    usuario_controller:cadastra_usuario(M, N, Tipo, Resultado),
+    (Resultado = erro(erro) -> writeln(erro);
+    Resultado = sucesso(Usuario) -> (
+        writeln('Cadastro feito com sucesso!'),
         aguarde_enter,
-        menu_logado(User)
-    ).
+        menu_logado(Usuario)
+    )).

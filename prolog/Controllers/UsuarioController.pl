@@ -8,7 +8,7 @@ cadastra_usuario(Matricula, Nome, TipoUsuario, R) :-
         R = erro('Usuário com mesma matricula já existe!');
         (model_usuario:new_usuario(Matricula, Nome, TipoUsuario, U) ->
             repository:save_usuario(U),
-            R = sucesso('Usuário cadastrado com sucesso');
+            R = sucesso(U);
         R = erro('Tipo de usuário invalido.'))
     ).
 
