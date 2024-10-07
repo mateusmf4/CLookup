@@ -22,8 +22,8 @@ listar_salas(Salas) :-
 get_sala(NumeroSala, Resultado) :- repository:fetch_sala(NumeroSala, Resultado).
 
 % retorna as reservas de uma sala que estão dentro de uma faixa de datas específicas, assim, recebe a sala, a data de início e a data de término e retorna uma lista de reservas que estão dentro da faixa de datas.
-sala_reservas_em_faixa(Sala, Inicio, Termino, ReservasEmFaixa) :-
-    findall(Reserva, (member(Reserva, Sala), se_reserva_conflita(Reserva, reserva(_, Inicio, Termino))), Reservas),
+sala_reservas_em_faixa(Reservas, Inicio, Termino, ReservasEmFaixa) :-
+    findall(Reserva, (member(Reserva, Reservas), se_reserva_conflita(Reserva, reserva(_, Inicio, Termino))), Reservas),
     predsort(compare(inicio), Reservas, ReservasEmFaixa).
 
 % ordena as reservas por data de início de cada uma das duas reservas

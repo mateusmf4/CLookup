@@ -14,9 +14,9 @@
 :- use_module('DateUtils.pl').
 :- use_module(library(readutil)).
 
-bem_vindo :- 
+bem_vindo :-
     print_cor("&l"),
-    writeln("╔═══════════════════════════════════════════════════════════╗"), 
+    writeln("╔═══════════════════════════════════════════════════════════╗"),
     writeln("║    ____                  __     ___           _           ║"),
     writeln("║   | __ )  ___ _ __ ___   | |   / (_)_ __   __| | ___      ║"),
     writeln("║   |  _ | / _ | '_ ` _ |   | | / /| | '_  |/  _`|/ _ |     ║"),
@@ -27,7 +27,7 @@ bem_vindo :-
 
 texto_sala :-
     print_cor("&l"),
-    writeln("╔═══════════════════════════════════════════════════════════╗"), 
+    writeln("╔═══════════════════════════════════════════════════════════╗"),
     writeln("║                ____        _                              ║"),
     writeln("║               / ___|  __ _| | __ _                        ║"),
     writeln("║               |___ | / _` | |/ _` |                       ║"),
@@ -91,7 +91,7 @@ menu_listar_salas :-
 
         inicio_semana(DateHoje, InicioSemana),
         fim_semana(DateHoje, FimSemana),
-        
+
         inicio_mes(DateHoje, InicioMes),
         fim_mes(DateHoje, FimMes),
 
@@ -111,14 +111,25 @@ menu_listar_salas :-
     ).
 
 menu_reservas_periodo(Sala, Inicio, Fim) :-
-    Reservas = Sala.reservas,
-    writeln(Sala),
-    writeln(Inicio),
-    writeln(Fim),
-    % * fazer a filtragem
-    % * ordenar por data de inicio
-    % * printar
-    !.
+    date_time_stamp(Inicio, InicioStamp),
+    date_time_stamp(Fim, FimStamp),
+    sala_reservas_em_faixa(Sala.reservas, InicioStamp, FimStamp, ReservasEmFaixa),
+
+    print_cor("\n&l~w. ~w&r\n", [Sala.numSala, Sala.nomeSala]),
+    forall(member(reserva(_, RInicio, RFim), ReservasEmFaixa), (
+        stamp_date_time(RInicio, InicioDate, local),
+        stamp_date_time(RFim, FimDate, local),
+
+        date_time_value(date, InicioDate, InicioDia),
+        date_time_value(date, FimDate, FimDia),
+        (InicioDia = FimDia -> FormatFim = "%H:%M"; FormatFim = "%d/%m/%Y %H:%M"),
+
+        format_time(atom(StringInicio), "%d/%m/%y %H:%M", InicioDate),
+        format_time(atom(StringFim), FormatFim, FimDate),
+
+        format(" - ~w até ~w\n", [StringInicio, StringFim])
+    )),
+    (ReservasEmFaixa = [] -> writeln("  Nenhuma reserva nesse período."); true).
 
 menu_monitor :-
     clear_screen,

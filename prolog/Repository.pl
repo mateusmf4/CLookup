@@ -83,20 +83,34 @@ save_usuario(Usuario) :-
     NewDados = Dados.put(usuarios/Matricula, Usuario),
     save_database(NewDados).
 
+% Converte as reservas da sala para um formato apropriado pro json
+converte_reserva(Reserva, ReservaJson) :-
+    ReservaJson = _{matricula: Matricula, inicio: Inicio, termino: Termino},
+    Reserva = reserva(Matricula, Inicio, Termino), !.
+
+converte_sala(Sala, SalaJson) :-
+    Sala = _{nomeSala: _, numSala: _, reservas: Reservas},
+    maplist(converte_reserva, Reservas, ReservasJson),
+    SalaJson = Sala.put(_{reservas: ReservasJson}), !.
+converte_sala_inv(SalaJson, Sala) :- converte_sala(Sala, SalaJson), !.
+
 % Procura uma sala no banco de dados pelo número da sala, se não for encontrado resulta em false.
 fetch_sala(NumSala, Sala) :-
     load_database(Dados),
     atom_number(Key, NumSala),
-    Sala = Dados.salas.get(Key).
+    SalaJson = Dados.salas.get(Key),
+    converte_sala(Sala, SalaJson).
 
 % Retorna todas as salas cadastradas no sistema.
 fetch_all_salas(R) :-
     load_database(Dados),
-    dict_pairs(Dados.salas, _, Pairs), pairs_values(Pairs, R).
+    dict_pairs(Dados.salas, _, Pairs), pairs_values(Pairs, SalasJson),
+    maplist(converte_sala_inv, SalasJson, R), !.
 
 % Adiciona uma nova sala no sistema, ou sobrescreve uma existente dado que ambas tenham o mesmo número de sala.
 save_sala(Sala) :-
     load_database(Dados),
     atom_number(Key, Sala.numSala),
-    NewDados = Dados.put(salas/Key, Sala),
+    converte_sala(Sala, SalaJson),
+    NewDados = Dados.put(salas/Key, SalaJson),
     save_database(NewDados).
