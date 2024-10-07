@@ -24,10 +24,10 @@ get_sala(NumeroSala, Resultado) :- repository:fetch_sala(NumeroSala, Resultado).
 % retorna as reservas de uma sala que estão dentro de uma faixa de datas específicas, assim, recebe a sala, a data de início e a data de término e retorna uma lista de reservas que estão dentro da faixa de datas.
 sala_reservas_em_faixa(Reservas, Inicio, Termino, ReservasEmFaixa) :-
     findall(Reserva, (member(Reserva, Reservas), se_reserva_conflita(Reserva, reserva(_, Inicio, Termino))), ReservasC),
-    predsort(compare(inicio), ReservasC, ReservasEmFaixa).
+    predsort(compare_reserva, ReservasC, ReservasEmFaixa).
 
 % ordena as reservas por data de início de cada uma das duas reservas
-compare(inicio, reserva(_, I1, _), reserva(_, I2, _), Order) :-
+compare_reserva(Order, reserva(_, I1, _), reserva(_, I2, _)) :-
     (   I1 @< I2 -> Order = '<'
     ;   I1 == I2 -> Order = '='
     ;   Order = '>'
@@ -56,11 +56,12 @@ reservar_sala(NumeroSala, Matricula, Inicio, Termino, Resultado) :-
         reserva_conflitantes(NovaReserva, Reservas, Conflitantes),
         findall((PriConflitante, ResConflitante), (
             member(ResConflitante, Conflitantes),
-            fetch_usuario(ResConflitante.usuario, UserConflit),
-            prioridadeUsuario(UserConflit, PriConflitante)
+            ResConflitante = reserva(MatriculaRes, _, _),
+            fetch_usuario(MatriculaRes, UserConflit),
+            prioridade_usuario(UserConflit, PriConflitante)
         ), Conflitos),
         fetch_usuario(Matricula, U),
-        prioridadeUsuario(U, MinhaPrioridade),
+        prioridade_usuario(U, MinhaPrioridade),
         (   forall(member((PriConflitante, ResConflitante), Conflitos), MinhaPrioridade > PriConflitante)
         ->  subtract(Reservas, Conflitantes, ReservasAtualizadas),
             append([NovaReserva], ReservasAtualizadas, NovasReservas),

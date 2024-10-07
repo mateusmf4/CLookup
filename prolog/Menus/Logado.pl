@@ -138,11 +138,19 @@ menu_reservas_periodo(Sala, Inicio, Fim) :-
 
 menu_monitor :-
     clear_screen,
-    writeln("Estudantes cadastrados:"), print_cor("&cMatr. Nome&r\n"),
-    listar_estudantes,
-    writeln("Informe a matricula do aluno: "),
+    writeln("Estudantes cadastrados:"),
+    usuario_controller:listar_alunos(Usuarios),
+    print_cor("&cMatr. Nome&r\n"),
+    forall(member(Usuario, Usuarios), (
+        (Usuario.tipo = monitor -> Sufixo = " - Monitor"; Sufixo = ""),
+        print_cor("~w. ~w~w\n", [Usuario.matricula, Usuario.nome, Sufixo])
+    )),
+    writeln("\nInforme a matricula do aluno: "),
     read_number(M),
-    (atualiza_monitor(M) -> writeln("Monitor adicionado!\n"); writeln("Estudante não está cadastrado\n")).
+    (atualiza_monitor(M)
+    -> writeln("Monitor adicionado!")
+    ; writeln("Estudante não encontrado")),
+    aguarde_enter.
 
 
 % Menu para reservar uma sala específica em um horário
