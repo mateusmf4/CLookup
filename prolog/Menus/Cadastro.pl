@@ -27,7 +27,7 @@ realizarCadastro(Tipo) :-
     writeln("Nome: "), read_str(N),
     writeln("Matrícula: "), read_number(M),
     usuario_controller:cadastra_usuario(M, N, Tipo, Resultado),
-    (Resultado = erro(erro) -> writeln(erro);
+    (Resultado = erro(Erro) -> writeln(Erro), aguarde_enter;
     Resultado = sucesso(Usuario) -> (
         writeln('Cadastro feito com sucesso!'),
         aguarde_enter,
