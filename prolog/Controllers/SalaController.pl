@@ -35,9 +35,7 @@ compare_reserva(Order, reserva(_, I1, _), reserva(_, I2, _)) :-
 
 % cancela uma reserva em uma sala, recebendo o número de sala, a reserva a ser cancelada e o resultado, se for cancelada com sucesso, ela retorna a sala atualizada.
 cancelar_reserva(NumeroSala, ReservaParaCancelar, Resultado) :-
-    repository:fetch_all_salas(Dados),
-    atom_number(Key, NumeroSala),
-    (   Dados.get(salas/Key, Sala)
+    (   get_sala(NumeroSala, Sala)
     ->  (   member(ReservaParaCancelar, Sala.reservas)
         ->  delete(Sala.reservas, ReservaParaCancelar, NovasReservas),
             NewSala = sala{numSala: Sala.numSala, nomeSala: Sala.nomeSala, reservas: NovasReservas},

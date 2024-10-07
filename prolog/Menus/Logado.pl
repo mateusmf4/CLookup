@@ -114,6 +114,19 @@ menu_listar_salas :-
         aguarde_enter
     ).
 
+formatar_reserva(reserva(_, RInicio, RFim), R) :-
+    stamp_date_time(RInicio, InicioDate, local),
+    stamp_date_time(RFim, FimDate, local),
+
+    date_time_value(date, InicioDate, InicioDia),
+    date_time_value(date, FimDate, FimDia),
+    (InicioDia = FimDia -> FormatFim = "%H:%M"; FormatFim = "%d/%m/%Y %H:%M"),
+
+    format_time(atom(StringInicio), "%d/%m/%y %H:%M", InicioDate),
+    format_time(atom(StringFim), FormatFim, FimDate),
+
+    format(atom(R), "~w até ~w", [StringInicio, StringFim]).
+
 menu_reservas_periodo(Sala, Inicio, Fim) :-
     date_time_stamp(Inicio, InicioStamp),
     date_time_stamp(Fim, FimStamp),
@@ -121,18 +134,9 @@ menu_reservas_periodo(Sala, Inicio, Fim) :-
     sala_reservas_em_faixa(Sala.reservas, InicioStamp, FimStamp, ReservasEmFaixa),
 
     print_cor("\n&l~w. ~w&r\n", [Sala.numSala, Sala.nomeSala]),
-    forall(member(reserva(_, RInicio, RFim), ReservasEmFaixa), (
-        stamp_date_time(RInicio, InicioDate, local),
-        stamp_date_time(RFim, FimDate, local),
-
-        date_time_value(date, InicioDate, InicioDia),
-        date_time_value(date, FimDate, FimDia),
-        (InicioDia = FimDia -> FormatFim = "%H:%M"; FormatFim = "%d/%m/%Y %H:%M"),
-
-        format_time(atom(StringInicio), "%d/%m/%y %H:%M", InicioDate),
-        format_time(atom(StringFim), FormatFim, FimDate),
-
-        format(" - ~w até ~w\n", [StringInicio, StringFim])
+    forall(member(Reserva, ReservasEmFaixa), (
+        formatar_reserva(Reserva, String),
+        format(" - ~w\n", [String])
     )),
     (ReservasEmFaixa = [] -> writeln("  Nenhuma reserva nesse período."); true).
 
@@ -203,11 +207,11 @@ cancelar_reserva(Usuario) :-
 
     ((escolher_sala(NumeroSala), get_sala(NumeroSala, Sala)) ->
         Reservas = Sala.reservas,
-        writeln("Reservas disponíveis para cancelamento:\n"),
+        writeln("\nReservas disponíveis para cancelamento:"),
 
         % Lista as reservas do usuário atual na sala
         findall(Reserva,
-            (member(Reserva, Reservas), Reserva = reserva(Usuario.nome, _, _)),
+            (member(Reserva, Reservas), Reserva = reserva(Usuario.matricula, _, _)),
             ReservasUsuario),
 
         (ReservasUsuario = [] ->
@@ -215,10 +219,10 @@ cancelar_reserva(Usuario) :-
             aguarde_enter
         ;
             % Exibe as reservas do usuário na sala
-            forall(
-                nth1(Index, ReservasUsuario, reserva(_, Inicio, Termino)),
-                format("~w. Reserva de ~w a ~w\n", [Index, Inicio, Termino])
-            ),
+            forall(nth1(Index, ReservasUsuario, Reserva), (
+                formatar_reserva(Reserva, String),
+                format("~w. ~w\n", [Index, String]
+            ))),
 
             writeln("\nDigite o número da reserva que deseja cancelar: "),
             read_number(NumeroReserva),
