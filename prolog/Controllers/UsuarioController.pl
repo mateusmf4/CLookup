@@ -2,12 +2,14 @@
 :- use_module('Controllers/UsuarioController.pl').
 :- use_module('Repository.pl').
 
+% cadastra um usuário 
 cadastraUsuario(Matricula, Nome, TipoUsuario, R) :- 
     (repository:fetch_usuario(Matricula, _) ->
         save_usuario(usuario(Matricula, Nome, TipoUsuario)),
         R = sucesso('Usuário cadastrado com sucesso');
         R = erro('Usuário com mesma matricula já existe!')).
        
+% transforma um estudante em monitor, ou retira o cargo de monitor de um estudante
 atualizaMonitor(Matricula, R) :-
     repository:fetch_usuario(Matricula, UsuarioCadastrado) -> (
         UsuarioCadastrado.tipo = 'monitor', 
