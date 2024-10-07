@@ -26,7 +26,7 @@ menuCadastro:-
 realizarCadastro(Tipo) :-
     writeln("Nome: "), read_str(N),
     writeln("Matrícula: "), read_number(M),
-    (fetch_usuario(M, U) -> 
+    (fetch_usuario(M, _) -> 
         (writeln("Usuário com mesma matricula já existe!"), aguarde_enter, menuInicio);
         newUsuario(M, N, Tipo, User),
         save_usuario(User),

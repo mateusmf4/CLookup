@@ -1,4 +1,4 @@
-:- module(date_utils, [inicio_dia/2, fim_dia/2, inicio_semana/2, fim_semana/2, inicio_mes/2, fim_mes/2]).
+:- module(date_utils, [inicio_dia/2, fim_dia/2, inicio_semana/2, fim_semana/2, inicio_mes/2, fim_mes/2, date_to_datetime/3]).
 
 % Converte uma data para um datetime, usando fuso horario local, com o horario dado.
 date_to_datetime(date(Y, Mes, D), time(H, Min, S), DateTime) :-

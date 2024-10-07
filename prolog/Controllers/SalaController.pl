@@ -23,8 +23,8 @@ get_sala(NumeroSala, Resultado) :- repository:fetch_sala(NumeroSala, Resultado).
 
 % retorna as reservas de uma sala que estão dentro de uma faixa de datas específicas, assim, recebe a sala, a data de início e a data de término e retorna uma lista de reservas que estão dentro da faixa de datas.
 sala_reservas_em_faixa(Reservas, Inicio, Termino, ReservasEmFaixa) :-
-    findall(Reserva, (member(Reserva, Reservas), se_reserva_conflita(Reserva, reserva(_, Inicio, Termino))), Reservas),
-    predsort(compare(inicio), Reservas, ReservasEmFaixa).
+    findall(Reserva, (member(Reserva, Reservas), se_reserva_conflita(Reserva, reserva(_, Inicio, Termino))), ReservasC),
+    predsort(compare(inicio), ReservasC, ReservasEmFaixa).
 
 % ordena as reservas por data de início de cada uma das duas reservas
 compare(inicio, reserva(_, I1, _), reserva(_, I2, _), Order) :-
@@ -49,18 +49,22 @@ cancelar_reserva(NumeroSala, ReservaParaCancelar, Resultado) :-
     ).
 
 % reserva uma sala para um usuário específico em uma faixa de datas específica com base na sua prioridade. Recebe o número de sala, o usuário, a data de início e a data de término e retorna a sala atualizada com a reserva adicionada se a reserva foi realizada, se tiverem conflitos com outras reservas, ela retorna um erro.
-reservar_sala(NumeroSala, Usuario, Inicio, Termino, Resultado) :-
+reservar_sala(NumeroSala, Matricula, Inicio, Termino, Resultado) :-
     get_sala(NumeroSala, Sala),
-    (   Sala = sala(_, _, Reservas)
-    ->  NovaReserva = reserva(Usuario, Inicio, Termino),
+    (   Reservas = Sala.reservas
+    ->  NovaReserva = reserva(Matricula, Inicio, Termino),
         reserva_conflitantes(NovaReserva, Reservas, Conflitantes),
-        findall(PriConflitante-ResConflitante, (member(ResConflitante, Conflitantes), fetch_usuario(ResConflitante.usuario, UserConflit), prioridadeUsuario(UserConflit, PriConflitante)), Conflitos),
-        fetch_usuario(Usuario, U),
+        findall((PriConflitante, ResConflitante), (
+            member(ResConflitante, Conflitantes),
+            fetch_usuario(ResConflitante.usuario, UserConflit),
+            prioridadeUsuario(UserConflit, PriConflitante)
+        ), Conflitos),
+        fetch_usuario(Matricula, U),
         prioridadeUsuario(U, MinhaPrioridade),
-        (   forall((PriConflitante-ResConflitante, Conflitos), MinhaPrioridade > PriConflitante)
-        ->  delete(Reservas, Conflitantes, ReservasAtualizadas),
+        (   forall(member((PriConflitante, ResConflitante), Conflitos), MinhaPrioridade > PriConflitante)
+        ->  subtract(Reservas, Conflitantes, ReservasAtualizadas),
             append([NovaReserva], ReservasAtualizadas, NovasReservas),
-            NewSala = Sala{reservas: NovasReservas},
+            NewSala = Sala.put(_{reservas: NovasReservas}),
             repository:save_sala(NewSala),
             Resultado = right(NewSala)
         ;   Resultado = left('Sala não disponível para reserva.')

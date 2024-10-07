@@ -54,14 +54,14 @@ menu_logado(Usuario) :-
     (TipoUsuario \= professor ->
         print_menu_escolhas([
             ('Ver Reservas de Sala', logado:menu_listar_salas),
-            ('Reservar Sala', logado:reservar_sala(Usuario)),
+            ('Reservar Sala', logado:menu_reserva_sala(Usuario)),
             ('Cancelar Reserva', logado:cancelar_reserva(Usuario)),
             ('Sair', halt)
         ])
     ;
         print_menu_escolhas([
             ('Ver Reservas de Sala', logado:menu_listar_salas),
-            ('Reservar Sala', logado:reservar_sala(Usuario)),
+            ('Reservar Sala', logado:menu_reserva_sala(Usuario)),
             ('Cancelar Reserva', logado:cancelar_reserva(Usuario)),
             ('Tornar Estudante Monitor', logado:menu_monitor),
             ('Sair', halt)
@@ -69,11 +69,7 @@ menu_logado(Usuario) :-
     ),
     menu_logado(Usuario). % Chama recursivamente para manter o menu ativo.
 
-% Menu que lista a sala e permite visualizar as reservas.
-menu_listar_salas :-
-    clear_screen,
-    texto_sala,
-
+escolher_sala(R) :-
     write('Salas disponíveis:\n\n'),
     listar_salas(Salas),
 
@@ -82,7 +78,15 @@ menu_listar_salas :-
     )),
 
     writeln('\nDigite o número da sala: '),
-    (read_number(NumeroSala), get_sala(NumeroSala, Sala)) -> (
+    read_number(NumeroSala), get_sala(NumeroSala, _),
+    R = NumeroSala.
+
+% Menu que lista a sala e permite visualizar as reservas.
+menu_listar_salas :-
+    clear_screen,
+    texto_sala,
+
+    (escolher_sala(NumeroSala), get_sala(NumeroSala, Sala)) -> (
         % Calcula as faixas de tempo baseado no dia atual
         get_time(Timestamp), stamp_date_time(Timestamp, DateHoje, local),
 
@@ -113,6 +117,7 @@ menu_listar_salas :-
 menu_reservas_periodo(Sala, Inicio, Fim) :-
     date_time_stamp(Inicio, InicioStamp),
     date_time_stamp(Fim, FimStamp),
+
     sala_reservas_em_faixa(Sala.reservas, InicioStamp, FimStamp, ReservasEmFaixa),
 
     print_cor("\n&l~w. ~w&r\n", [Sala.numSala, Sala.nomeSala]),
@@ -143,12 +148,8 @@ menu_monitor :-
 % Menu para reservar uma sala específica em um horário
 menu_reserva_sala(Usuario) :-
     clear_screen,
-    writeln("Salas disponíveis:"),
-    listar_salas(Salas),  % Supondo que listar_salas exiba as salas disponíveis.
     
-    writeln("Digite o número da sala: "),
-    read_number(NumeroSala),
-    
+    escolher_sala(NumeroSala) -> (
     writeln("Digite a data da reserva (DD/MM/AAAA): "),
     read_line_to_string(user_input, DataString),
     split_string(DataString, "/", "", [DDString, MMString, AAAAString]),
@@ -172,25 +173,27 @@ menu_reserva_sala(Usuario) :-
     date_to_datetime(date(Ano, Mes, Dia), time(HoraInicio, MinutoInicio, 0), InicioReserva),
     date_to_datetime(date(Ano, Mes, Dia), time(HoraFim, MinutoFim, 0), FimReserva),
 
+    date_time_stamp(InicioReserva, Inicio),
+    date_time_stamp(FimReserva, Fim),
+    
     % Tenta reservar a sala usando a função do controlador de sala
-    (SalaController:reservarSala(NumeroSala, Usuario, InicioReserva, FimReserva) ->
-        writeln("Reserva feita com sucesso!\n");
-        writeln("Erro ao fazer a reserva. A sala pode estar ocupada nesse horário.\n")
+    sala_controller:reservar_sala(NumeroSala, Usuario.matricula, Inicio, Fim, Resultado),
+    (Resultado = left(Erro) ->
+        format("Erro: ~w\n", [Erro]);
+        writeln("Reserva feita com sucesso!")
     ),
     
-    aguarde_enter.
+    aguarde_enter
+    ); (
+        writeln('Sala não encontrada.'),
+        aguarde_enter
+    ).
 
 % Menu para cancelar uma reserva
 cancelar_reserva(Usuario) :-
     clear_screen,
-    writeln("Salas disponíveis:"),
-    listar_salas(Salas),  % Supondo que listar_salas exiba as salas disponíveis.
 
-    writeln("Digite o número da sala: "),
-    read_number(NumeroSala),
-
-    % Obtém a sala selecionada
-    (get_sala(NumeroSala, Sala) ->
+    ((escolher_sala(NumeroSala), get_sala(NumeroSala, Sala)) ->
         Reservas = Sala.reservas,
         writeln("Reservas disponíveis para cancelamento:\n"),
 
@@ -216,9 +219,9 @@ cancelar_reserva(Usuario) :-
 
             % Chama a função de cancelamento da reserva
             cancelar_reserva(NumeroSala, ReservaParaCancelar, Resultado),
-            (Resultado = right(SalaAtualizada) ->
-                writeln("Reserva cancelada com sucesso!\n");
-                writeln("Erro: Não foi possível cancelar a reserva.\n")
+            (Resultado = right(_) ->
+                writeln("Reserva cancelada com sucesso!");
+                writeln("Erro: Não foi possível cancelar a reserva.")
             ),
             aguarde_enter
         )
